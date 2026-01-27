@@ -6,7 +6,19 @@
     "version": "1.0.0",
     "scheme": "gwangsan",
     "web": {
-      "favicon": "./src/app/favicon.ico"
+      "favicon": "./src/shared/assets/png/icon.png",
+      "bundler": "metro",
+      "output": "static",
+      "backgroundColor": "#ffffff",
+      "themeColor": "#000000",
+      "display": "standalone",
+      "orientation": "portrait",
+      "scope": "/",
+      "startUrl": "/",
+      "shortName": "광산",
+      "description": "시민화폐 광산 PWA 애플리케이션",
+      "lang": "ko",
+      "crossorigin": "use-credentials"
     },
     "experiments": {
       "tsconfigPaths": true
