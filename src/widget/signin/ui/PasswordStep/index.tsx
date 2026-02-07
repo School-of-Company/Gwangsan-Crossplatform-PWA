@@ -5,7 +5,6 @@ import SigninForm from '~/entity/auth/ui/SigninForm';
 import { useSigninFormField, useSigninStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { passwordSchema } from '~/entity/auth/model/authSchema';
 import { signinWithDeviceInfo } from '~/entity/auth/api/signin';
-import { View } from 'react-native';
 import { ZodError } from 'zod';
 import { router } from 'expo-router';
 import { getErrorMessage } from '~/shared/lib/errorHandler';
@@ -68,7 +67,7 @@ export default function PasswordStep() {
       onNext={validateAndNext}
       nextButtonText={isLoading ? '로그인 중...' : '로그인'}
       isNextDisabled={password?.trim() === '' || isLoading}>
-      <View>
+      <div>
         <Input
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요"
@@ -80,7 +79,7 @@ export default function PasswordStep() {
           editable={!isLoading}
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SigninForm>
   );
 }
