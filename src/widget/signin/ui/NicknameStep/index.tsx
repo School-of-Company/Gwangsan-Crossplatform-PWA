@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SigninForm from '~/entity/auth/ui/SigninForm';
 import { useSigninFormField, useSigninStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { nicknameSchema } from '~/entity/auth/model/authSchema';
-import { View } from 'react-native';
 import { ZodError } from 'zod';
 import { router } from 'expo-router';
 
@@ -54,7 +53,7 @@ export default function NicknameStep() {
       onNext={validateAndNext}
       onBack={handleBack}
       isNextDisabled={nickname?.trim() === ''}>
-      <View>
+      <div>
         <Input
           label="별칭"
           placeholder="별칭을 입력해주세요"
@@ -64,7 +63,7 @@ export default function NicknameStep() {
           returnKeyType="next"
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SigninForm>
   );
 }
