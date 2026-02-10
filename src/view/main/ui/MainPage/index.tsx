@@ -1,5 +1,3 @@
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '~/entity/main/ui/header';
 import { Footer } from '~/shared/ui/Footer';
 import { Inform, MainSlideViewer } from '~/widget/main';
@@ -15,17 +13,17 @@ export default function MainPageView() {
       text2: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.',
     });
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex-1 bg-white">
       <Header />
-      <ScrollView className="flex-1">
+      <div className="flex-1">
         <MainSlideViewer />
         <Inform
           head={data?.headName ?? '본점'}
           dong={data?.dongName ?? '동'}
           place={data?.placeName ?? '지점'}
         />
-      </ScrollView>
+      </div>
       <Footer />
-    </SafeAreaView>
+    </div>
   );
 }
