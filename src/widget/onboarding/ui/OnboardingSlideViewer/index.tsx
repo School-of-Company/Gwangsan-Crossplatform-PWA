@@ -31,7 +31,7 @@ const OnboardingSlideViewer = () => {
   };
 
   return (
-    <View className="flex flex-col items-center gap-3 ">
+    <div className="flex flex-col items-center gap-3 ">
       <ScrollView
         ref={scrollViewRef}
         horizontal
@@ -52,7 +52,7 @@ const OnboardingSlideViewer = () => {
         ))}
       </ScrollView>
       <SlideIndicator total={images.length} current={current} onPress={handleDotPress} />
-    </View>
+    </div>
   );
 };
 
