@@ -1,16 +1,7 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-} from 'react-native';
 import { Button } from '@/shared/ui/Button';
-import { ReactNode, memo } from 'react';
+import { ReactNode } from 'react';
 import { useSigninStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import BackArrow from '@/shared/assets/svg/BackArrow';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SigninFormProps {
   title: string;
@@ -22,7 +13,7 @@ interface SigninFormProps {
   isNextDisabled?: boolean;
 }
 
-function SigninForm({
+export default function SigninForm({
   title,
   description,
   children,
@@ -34,41 +25,32 @@ function SigninForm({
   const { prevStep } = useSigninStepNavigation();
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 bg-white"
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View className="flex-1 gap-8 px-6">
-            <View className="flex-row items-center pt-4">
-              <TouchableOpacity className="flex-row items-center" onPress={onBack || prevStep}>
+    <div className="flex-1 bg-white">
+      <div className="flex-1 bg-white">
+        <div className="flex-1">
+          <div className="flex-1 gap-8 px-6">
+            <div className="flex-row items-center pt-4">
+              <button className="flex-row items-center" onClick={onBack || prevStep}>
                 <BackArrow />
-                <Text className="ml-2 text-gray-500">뒤로</Text>
-              </TouchableOpacity>
-            </View>
+                <span className="ml-2 text-gray-500">뒤로</span>
+              </button>
+            </div>
 
-            <View>
-              <Text className="text-3xl font-bold">{title}</Text>
-              <Text className="mt-4 text-lg text-gray-700">{description}</Text>
-            </View>
+            <div>
+              <h1 className="text-3xl font-bold">{title}</h1>
+              <p className="mt-4 text-lg text-gray-700">{description}</p>
+            </div>
 
-            <View className="mt-8 flex-1">{children}</View>
+            <div className="mt-8 flex-1">{children}</div>
 
-            <View className="mb-8 mt-auto">
+            <div className="mb-8 mt-auto">
               <Button onPress={onNext} disabled={isNextDisabled}>
                 {nextButtonText}
               </Button>
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
-
-export default memo(SigninForm);
