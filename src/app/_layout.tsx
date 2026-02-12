@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import '../../global.css';
 import { useCustomFonts } from '@/shared/assets/fonts/fontLoader';
 import Toast from 'react-native-toast-message';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QueryProvider from '../shared/lib/QueryProvider';
 import '@/shared/lib/sentry';
 import * as SentryRN from '@sentry/react-native';
@@ -24,6 +26,7 @@ export default function RootLayout() {
           />
         </SentryRN.ErrorBoundary>
         <Toast />
+        <ToastContainer position="top-right" autoClose={3000} />
       </QueryProvider>
     </View>
   );
