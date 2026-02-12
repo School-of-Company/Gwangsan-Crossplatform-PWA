@@ -1,10 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Input } from '@/shared/ui/Input';
 import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { passwordSchema, passwordConfirmSchema } from '~/entity/auth/model/authSchema';
-import { View, TextInput } from 'react-native';
 import { ZodError } from 'zod';
 
 export default function PasswordStep() {
@@ -19,8 +18,6 @@ export default function PasswordStep() {
   );
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmError, setConfirmError] = useState<string | null>(null);
-
-  const passwordConfirmRef = useRef<TextInput>(null);
 
   const validateAndNext = () => {
     let hasError = false;
@@ -62,10 +59,6 @@ export default function PasswordStep() {
     if (confirmError) setConfirmError(null);
   };
 
-  const handlePasswordSubmit = () => {
-    passwordConfirmRef.current?.focus();
-  };
-
   const handleConfirmSubmit = () => {
     if (password?.trim() !== '' && passwordConfirm?.trim() !== '') {
       validateAndNext();
@@ -78,22 +71,20 @@ export default function PasswordStep() {
       description="비밀번호를 입력해주세요"
       onNext={validateAndNext}
       isNextDisabled={password?.trim() === '' || passwordConfirm?.trim() === ''}>
-      <View>
+      <div>
         <Input
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요"
           value={password as string}
           onChangeText={handlePasswordChange}
-          onSubmitEditing={handlePasswordSubmit}
           secureTextEntry={true}
           returnKeyType="next"
         />
         <ErrorMessage error={passwordError} />
-      </View>
+      </div>
 
-      <View className="mt-4">
+      <div className="mt-4">
         <Input
-          ref={passwordConfirmRef}
           label="비밀번호 재입력"
           placeholder="비밀번호를 다시 입력해주세요"
           value={passwordConfirm as string}
@@ -103,7 +94,7 @@ export default function PasswordStep() {
           returnKeyType="done"
         />
         <ErrorMessage error={confirmError} />
-      </View>
+      </div>
     </SignupForm>
   );
 }
