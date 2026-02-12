@@ -21,12 +21,12 @@ export default function Complete() {
       await signup(formData);
 
       setIsSuccess(true);
-      toast.success('회원가입 완료');
+      toast.success('회원가입이 성공적으로 완료되었습니다.');
     } catch (err) {
       setIsSuccess(false);
       const errorMessage = getErrorMessage(err);
       setError(errorMessage);
-      toast.error(`회원가입 실패 ${errorMessage}`);
+      toast.error(`회원가입 실패: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
