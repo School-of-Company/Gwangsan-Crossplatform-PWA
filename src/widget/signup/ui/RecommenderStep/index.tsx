@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { nicknameSchema } from '~/entity/auth/model/authSchema';
-import { View } from 'react-native';
 import { ZodError } from 'zod';
 
 export default function RecommenderStep() {
@@ -47,7 +46,7 @@ export default function RecommenderStep() {
       description="추천인을 입력해주세요"
       onNext={validateAndNext}
       isNextDisabled={recommender?.trim() === ''}>
-      <View>
+      <div>
         <Input
           label="추천인"
           placeholder="추천인 별칭을 입력해주세요"
@@ -57,7 +56,7 @@ export default function RecommenderStep() {
           returnKeyType="done"
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SignupForm>
   );
 }
