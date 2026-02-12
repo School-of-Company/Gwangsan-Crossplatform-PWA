@@ -59,10 +59,10 @@ export default function Complete() {
     return (
       <div className="flex-1 gap-8 bg-white px-6">
         <div className="mt-44 flex-col items-center justify-center">
-          <img src={gwangsanLogo} style={{ width: 256, height: 256 }} />
-          <h2 className="text-center text-2xl font-bold text-red-500">
+          <img src={gwangsanLogo} className="h-64 w-64" />
+          <p className="text-center text-2xl font-bold text-red-500">
             회원가입 중 오류가 발생했습니다
-          </h2>
+          </p>
           <p className="mt-4 text-center text-gray-700">{error}</p>
         </div>
         <div className="mb-8 mt-auto gap-4">
@@ -75,7 +75,7 @@ export default function Complete() {
   return (
     <div className="flex-1 gap-8 bg-white px-6">
       <div className="mt-44 flex-col items-center justify-center">
-        <img src={gwangsanLogo} style={{ width: 256, height: 256 }} />
+        <img src={gwangsanLogo} className="h-64 w-64" />
         <h2 className="text-center text-2xl font-bold text-[#0075C2]">회원가입이 완료되었습니다</h2>
       </div>
       <div className="mb-8 mt-auto">
