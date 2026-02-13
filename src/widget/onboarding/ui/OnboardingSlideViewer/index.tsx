@@ -1,56 +1,52 @@
+'use client';
+
 import { useRef, useState } from 'react';
-import {
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
 import onboardingSlide1 from '~/shared/assets/png/startSlide/onboardingSlide1.png';
 import onboardingSlide2 from '~/shared/assets/png/startSlide/onboardingSlide2.png';
 import onboardingSlide3 from '~/shared/assets/png/startSlide/onboardingSlide3.png';
 import { SlideIndicator } from '@/shared/ui';
 
 const images = [onboardingSlide1, onboardingSlide2, onboardingSlide3];
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const OnboardingSlideViewer = () => {
   const [current, setCurrent] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleDotPress = (idx: number) => {
-    scrollViewRef.current?.scrollTo({ x: SCREEN_WIDTH * idx, animated: true });
-    setCurrent(idx);
+    if (scrollRef.current) {
+      const scrollWidth = scrollRef.current.clientWidth;
+      scrollRef.current.scrollTo({
+        left: scrollWidth * idx,
+        behavior: 'smooth',
+      });
+      setCurrent(idx);
+    }
   };
 
-  const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(contentOffsetX / SCREEN_WIDTH);
-    setCurrent(newIndex);
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollLeft, clientWidth } = event.currentTarget;
+    const newIndex = Math.round(scrollLeft / clientWidth);
+    if (newIndex !== current) {
+      setCurrent(newIndex);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 ">
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={handleScrollEnd}
-        scrollEventThrottle={16}>
+    <div className="flex flex-col items-center gap-3">
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {images.map((img, idx) => (
-          <Image
-            key={idx}
-            source={img}
-            style={{
-              width: SCREEN_WIDTH,
-              height: SCREEN_HEIGHT * 0.65,
-              resizeMode: 'contain',
-            }}
-          />
+          <div key={idx} className="flex min-w-full justify-center snap-center">
+            <img
+              src={typeof img === 'string' ? img : (img as any).src || (img as any).uri || img}
+              alt={`slide-${idx}`}
+              className="w-full h-[65vh] object-contain"
+            />
+          </div>
         ))}
-      </ScrollView>
+      </div>
       <SlideIndicator total={images.length} current={current} onPress={handleDotPress} />
     </div>
   );
