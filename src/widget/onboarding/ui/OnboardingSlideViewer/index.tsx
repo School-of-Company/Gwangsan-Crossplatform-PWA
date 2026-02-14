@@ -40,7 +40,7 @@ const OnboardingSlideViewer = () => {
         {images.map((img, idx) => (
           <div key={idx} className="flex min-w-full snap-center justify-center">
             <img
-              src={typeof img === 'string' ? img : (img as any).src || (img as any).uri || img}
+              src={typeof img === 'string' ? img : (img as any).src || (img as any).uri || ''}
               alt={`slide-${idx}`}
               className="h-[65vh] w-full object-contain"
             />
