@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { SearchIcon } from '@/shared/assets/svg/SearchIcon';
-import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { DONG } from '@/shared/consts/dong';
 
 export default function DongStep() {
@@ -60,7 +59,7 @@ export default function DongStep() {
       description="동네를 선택해주세요"
       onNext={handleNext}
       isNextDisabled={dongName?.trim() === ''}>
-      <View>
+      <div>
         <Input
           label=""
           placeholder="동네를 검색해주세요"
@@ -73,24 +72,22 @@ export default function DongStep() {
         />
 
         {showResults && filteredDongs.length > 0 && (
-          <ScrollView
-            className="mt-8 max-h-60 border-t border-[#EFF0F2]"
-            keyboardShouldPersistTaps="handled">
+          <div className="mt-8 max-h-60 overflow-y-auto border-t border-[#EFF0F2]">
             {filteredDongs.map((item, index) => (
-              <TouchableOpacity
+              <button
                 key={item}
-                className={`border-b border-[#EFF0F2] px-4 py-8 ${
+                className={`w-full border-b border-[#EFF0F2] px-4 py-8 text-left ${
                   index === filteredDongs.length - 1 ? 'border-b-0' : ''
                 }`}
-                onPress={() => handleSelectDong(item)}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
+                onClick={() => handleSelectDong(item)}>
+                <span>{item}</span>
+              </button>
             ))}
-          </ScrollView>
+          </div>
         )}
 
         <ErrorMessage error={error} className="mt-2 h-6" />
-      </View>
+      </div>
     </SignupForm>
   );
 }

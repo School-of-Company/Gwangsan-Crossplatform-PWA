@@ -3,7 +3,6 @@ import SpecialtiesDropdown from '~/entity/auth/ui/SpecialtiesDropdown';
 import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
-import { View } from 'react-native';
 import { SPECIALTIES } from '@/shared/consts/specialties';
 
 export default function SpecialtiesStep() {
@@ -36,7 +35,7 @@ export default function SpecialtiesStep() {
       description="자신의 특기를 선택해주세요"
       onNext={handleNext}
       isNextDisabled={selectedSpecialties.length === 0}>
-      <View className="w-full">
+      <div className="w-full">
         <SpecialtiesDropdown
           items={SPECIALTIES}
           selectedItems={selectedSpecialties}
@@ -45,7 +44,7 @@ export default function SpecialtiesStep() {
           allowCustomInput={true}
         />
         <ErrorMessage error={error} className="mt-2 h-6" />
-      </View>
+      </div>
     </SignupForm>
   );
 }

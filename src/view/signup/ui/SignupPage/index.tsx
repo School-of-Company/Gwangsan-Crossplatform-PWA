@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { useSignupCurrentStep } from '~/entity/auth/model/useAuthSelectors';
 import {
   NameStep,
@@ -26,11 +25,9 @@ const STEP_COMPONENTS = {
   complete: Complete,
 } as const;
 
-function SignupPageView(): React.ReactNode {
+export default function SignupPageView() {
   const currentStep = useSignupCurrentStep();
   const StepComponent = STEP_COMPONENTS[currentStep];
 
   return <StepComponent />;
 }
-
-export default memo(SignupPageView);

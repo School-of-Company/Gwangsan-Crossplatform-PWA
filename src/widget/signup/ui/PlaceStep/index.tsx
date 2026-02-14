@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { PLACE_ITEMS } from '@/shared/consts/place';
-import { View } from 'react-native';
 
 export default function PlaceStep() {
   const { value: initialPlaceId, updateField } = useSignupFormField('placeId');
@@ -39,7 +38,7 @@ export default function PlaceStep() {
       description="지점을 선택해주세요"
       onNext={handleNext}
       isNextDisabled={!placeIdStr}>
-      <View>
+      <div>
         <Dropdown
           items={dropdownItems}
           selectedItem={placeIdStr}
@@ -47,7 +46,7 @@ export default function PlaceStep() {
           placeholder="지점을 선택해주세요"
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SignupForm>
   );
 }

@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { descriptionSchema } from '~/entity/auth/model/authSchema';
-import { View } from 'react-native';
 import { ZodError } from 'zod';
 
 export default function DescriptionStep() {
@@ -47,7 +46,7 @@ export default function DescriptionStep() {
       description="자신을 소개하는 글을 작성해주세요"
       onNext={validateAndNext}
       isNextDisabled={description.trim().length < 1}>
-      <View>
+      <div>
         <TextField
           label="자기소개"
           placeholder="자신을 소개하는 글을 작성해주세요."
@@ -60,7 +59,7 @@ export default function DescriptionStep() {
           maxLength={500}
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SignupForm>
   );
 }
