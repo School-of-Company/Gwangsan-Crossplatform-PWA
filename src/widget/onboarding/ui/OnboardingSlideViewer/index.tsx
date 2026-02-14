@@ -36,13 +36,13 @@ const OnboardingSlideViewer = () => {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        className="flex w-full snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {images.map((img, idx) => (
-          <div key={idx} className="flex min-w-full justify-center snap-center">
+          <div key={idx} className="flex min-w-full snap-center justify-center">
             <img
               src={typeof img === 'string' ? img : (img as any).src || (img as any).uri || img}
               alt={`slide-${idx}`}
-              className="w-full h-[65vh] object-contain"
+              className="h-[65vh] w-full object-contain"
             />
           </div>
         ))}
