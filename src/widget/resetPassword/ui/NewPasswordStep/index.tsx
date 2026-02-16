@@ -7,12 +7,12 @@ import {
   useResetPasswordStepNavigation,
 } from '~/entity/auth/model/useAuthSelectors';
 import { passwordSchema, passwordConfirmSchema } from '~/entity/auth/model/authSchema';
-import { View, TextInput, Alert } from 'react-native';
 import { ZodError } from 'zod';
 import { resetPassword } from '~/entity/auth/api/resetPassword';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 export default function NewPasswordStep() {
+  const router = useRouter();
   const { value: phoneNumber } = useResetPasswordFormField('phoneNumber');
   const { value: newPassword, updateField: updateNewPassword } =
     useResetPasswordFormField('newPassword');
@@ -27,7 +27,7 @@ export default function NewPasswordStep() {
   const [confirmError, setConfirmError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const passwordConfirmRef = useRef<TextInput>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement>(null);
 
   const handlePasswordChange = useCallback(
     (text: string) => {
@@ -84,22 +84,11 @@ export default function NewPasswordStep() {
       updateNewPassword(localPassword);
       updateNewPasswordConfirm(localPasswordConfirm);
 
-      Alert.alert(
-        '비밀번호 재설정 완료',
-        '비밀번호가 성공적으로 변경되었습니다.\n새로운 비밀번호로 로그인해주세요.',
-        [
-          {
-            text: '확인',
-            onPress: () => {
-              resetStore();
-              router.replace('/signin');
-            },
-          },
-        ]
-      );
+      alert('비밀번호가 성공적으로 변경되었습니다.\n새로운 비밀번호로 로그인해주세요.');
+      resetStore();
+      router.replace('/signin');
     } catch (error) {
-      Alert.alert(
-        '비밀번호 재설정 실패',
+      alert(
         error instanceof Error
           ? error.message
           : '비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'
@@ -131,34 +120,38 @@ export default function NewPasswordStep() {
       onNext={validateAndResetPassword}
       nextButtonText={isLoading ? '설정 중...' : '비밀번호 재설정'}
       isNextDisabled={isNextDisabled}>
-      <View>
+      <div>
         <Input
           label="새 비밀번호"
           placeholder="새 비밀번호를 입력해주세요"
           value={localPassword}
-          onChangeText={handlePasswordChange}
-          onSubmitEditing={handlePasswordSubmit}
-          secureTextEntry={true}
-          returnKeyType="next"
-          editable={!isLoading}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handlePasswordChange(e.target.value)
+          }
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === 'Enter' && handlePasswordSubmit()
+          }
+          type="password"
+          disabled={isLoading}
         />
         <ErrorMessage error={passwordError} />
-      </View>
+      </div>
 
-      <View className="mt-4">
+      <div className="mt-4">
         <Input
           ref={passwordConfirmRef}
           label="비밀번호 재입력"
           placeholder="비밀번호를 다시 입력해주세요"
           value={localPasswordConfirm}
-          onChangeText={handleConfirmChange}
-          onSubmitEditing={handleConfirmSubmit}
-          secureTextEntry={true}
-          returnKeyType="done"
-          editable={!isLoading}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleConfirmChange(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            e.key === 'Enter' && handleConfirmSubmit()
+          }
+          type="password"
+          disabled={isLoading}
         />
         <ErrorMessage error={confirmError} />
-      </View>
+      </div>
     </ResetPasswordForm>
   );
 }
