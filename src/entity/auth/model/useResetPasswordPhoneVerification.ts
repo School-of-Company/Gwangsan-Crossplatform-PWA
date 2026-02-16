@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { TextInput } from 'react-native';
 import { phoneSchema, verificationCodeSchema } from '~/entity/auth/model/authSchema';
 import { sendPasswordResetSms } from '~/entity/auth/api/sendPasswordResetSms';
 import { verifyPasswordResetSms } from '~/entity/auth/api/verifyPasswordResetSms';
@@ -26,7 +25,7 @@ export const useResetPasswordPhoneVerification = ({
   onSuccess,
 }: UseResetPasswordPhoneVerificationProps) => {
   const isMountedRef = useRef(true);
-  const verificationRef = useRef<TextInput>(null);
+  const verificationRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [phoneNumber, setPhoneNumber] = useState((initialPhoneNumber as string) || '');
