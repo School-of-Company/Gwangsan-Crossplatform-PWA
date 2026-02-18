@@ -1,5 +1,3 @@
-'use client';
-
 import { useRef, useState } from 'react';
 import onboardingSlide1 from '~/shared/assets/png/startSlide/onboardingSlide1.png';
 import onboardingSlide2 from '~/shared/assets/png/startSlide/onboardingSlide2.png';
@@ -12,42 +10,45 @@ const OnboardingSlideViewer = () => {
   const [current, setCurrent] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleDotPress = (idx: number) => {
-    if (scrollRef.current) {
-      const scrollWidth = scrollRef.current.clientWidth;
-      scrollRef.current.scrollTo({
-        left: scrollWidth * idx,
-        behavior: 'smooth',
-      });
-      setCurrent(idx);
-    }
-  };
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const { scrollLeft, clientWidth } = event.currentTarget;
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    if (clientWidth === 0) return;
     const newIndex = Math.round(scrollLeft / clientWidth);
     if (newIndex !== current) {
       setCurrent(newIndex);
     }
   };
 
+  const handleDotPress = (idx: number) => {
+    if (!scrollRef.current) return;
+    const { clientWidth } = scrollRef.current;
+    scrollRef.current.scrollTo({
+      left: clientWidth * idx,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-3 w-full h-full">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex w-full snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {images.map((img, idx) => (
-          <div key={idx} className="flex min-w-full snap-center justify-center">
+        className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        {images.map((img: any, idx) => (
+          <div key={idx} className="w-full h-full flex-shrink-0 snap-center flex justify-center items-center overflow-hidden">
             <img
-              src={typeof img === 'string' ? img : (img as { src: string }).src || ''}
+              src={img.uri || img.src || img}
               alt={`slide-${idx}`}
-              className="h-[65vh] w-full object-contain"
+              className="w-full h-[65dvh] object-contain"
             />
           </div>
         ))}
       </div>
-      <SlideIndicator total={images.length} current={current} onPress={handleDotPress} />
+      <div className="pb-4">
+        <SlideIndicator total={images.length} current={current} onPress={handleDotPress} />
+      </div>
     </div>
   );
 };
