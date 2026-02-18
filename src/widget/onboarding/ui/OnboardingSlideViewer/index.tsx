@@ -30,18 +30,20 @@ const OnboardingSlideViewer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full h-full">
+    <div className="flex h-full w-full flex-col items-center gap-3">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+        className="scrollbar-hide flex h-full w-full snap-x snap-mandatory overflow-x-auto"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {images.map((img: any, idx) => (
-          <div key={idx} className="w-full h-full flex-shrink-0 snap-center flex justify-center items-center overflow-hidden">
+          <div
+            key={idx}
+            className="flex h-full w-full flex-shrink-0 snap-center items-center justify-center overflow-hidden">
             <img
               src={img.uri || img.src || img}
               alt={`slide-${idx}`}
-              className="w-full h-[65dvh] object-contain"
+              className="h-[65dvh] w-full object-contain"
             />
           </div>
         ))}
