@@ -3,12 +3,12 @@ import { OnboardingSlideViewer } from '~/widget/onboarding';
 
 const OnboardingPage = () => {
   return (
-    <div className="flex flex-1 flex-col bg-white">
-      <div className="flex-7 flex">
+    <div className="flex h-dvh w-full flex-1 flex-col bg-white">
+      <div className="flex-[7]">
         <OnboardingSlideViewer />
       </div>
-      <div className="flex flex-1" />
-      <div className="flex-2 flex">
+      <div className="flex-1" />
+      <div className="flex-none">
         <AuthButtonContainer />
       </div>
     </div>
