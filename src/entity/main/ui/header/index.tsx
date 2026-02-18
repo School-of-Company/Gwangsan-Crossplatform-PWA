@@ -1,7 +1,7 @@
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import logo from '~/shared/assets/png/logo.png';
+import NotificationIcon from '~/shared/assets/svg/NotificationIcon';
 
 export default function Header() {
   const r = useRouter();
@@ -22,7 +22,7 @@ export default function Header() {
         onClick={handlePressNotification}
         className="rounded-full p-1 transition-colors hover:bg-gray-100 active:bg-gray-200"
         aria-label="알림 확인">
-        <Ionicons name="notifications-outline" size={24} color="#000" />
+        <NotificationIcon />
       </button>
     </header>
   );
