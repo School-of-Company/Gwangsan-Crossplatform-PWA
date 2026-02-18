@@ -49,6 +49,7 @@
     "react-native-toast-message": "^2.3.3",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.21.0",
+    "react-toastify": "^11.0.5",
     "scrolloop": "^0.3.4",
     "socket.io-client": "^4.8.1",
     "whatwg-fetch": "^3.6.20",
@@ -57,7 +58,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/react": "~19.1.10",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",

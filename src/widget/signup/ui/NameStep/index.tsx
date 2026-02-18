@@ -1,14 +1,13 @@
-import { useState, memo } from 'react';
+import { useState } from 'react';
 import { Input } from '@/shared/ui/Input';
 import { ErrorMessage } from '@/shared/ui/ErrorMessage';
 import SignupForm from '~/entity/auth/ui/SignupForm';
 import { useSignupFormField, useSignupStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import { nameSchema } from '~/entity/auth/model/authSchema';
-import { View } from 'react-native';
 import { router } from 'expo-router';
 import { ZodError } from 'zod';
 
-function NameStep() {
+export default function NameStep() {
   const { value: initialName, updateField } = useSignupFormField('name');
   const { nextStep, resetStore } = useSignupStepNavigation();
   const [name, setName] = useState<string | undefined>(initialName as string);
@@ -53,7 +52,7 @@ function NameStep() {
       onNext={validateAndNext}
       onBack={handleBack}
       isNextDisabled={name?.trim() === ''}>
-      <View>
+      <div>
         <Input
           label="이름"
           placeholder="본인의 이름을 입력해주세요"
@@ -63,9 +62,7 @@ function NameStep() {
           returnKeyType="next"
         />
         <ErrorMessage error={error} />
-      </View>
+      </div>
     </SignupForm>
   );
 }
-
-export default memo(NameStep);
