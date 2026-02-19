@@ -14,7 +14,7 @@ export default function MainPageView() {
   return (
     <div className="flex-1 bg-white">
       <Header />
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         <MainSlideViewer />
         <Inform
           head={data?.headName ?? '본점'}
