@@ -70,7 +70,7 @@ export default function ProfileEditPageView() {
             label="별칭"
             placeholder="별칭을 입력해주세요"
             value={nickname}
-            onChangeText={setNickname}
+            onChange={(e) => setNickname(e.target.value)}
             maxLength={20}
           />
 
@@ -87,14 +87,14 @@ export default function ProfileEditPageView() {
             label="자기소개"
             placeholder="자신을 소개해주세요"
             value={description}
-            onChangeText={setDescription}
+            onChange={(e) => setDescription(e.target.value)}
             maxLength={300}
           />
         </View>
       </ScrollView>
 
       <View className="px-6 pb-6">
-        <Button onPress={handleSubmit} disabled={!isFormValid || isSubmitting}>
+        <Button onClick={handleSubmit} disabled={!isFormValid || isSubmitting}>
           {isSubmitting ? '수정 중...' : '수정'}
         </Button>
       </View>
