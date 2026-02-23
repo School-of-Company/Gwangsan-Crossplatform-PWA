@@ -34,12 +34,6 @@ export default function DescriptionStep() {
     if (error) setError(null);
   };
 
-  const handleSubmit = () => {
-    if (description.trim().length >= 1) {
-      validateAndNext();
-    }
-  };
-
   return (
     <SignupForm
       title="회원가입"

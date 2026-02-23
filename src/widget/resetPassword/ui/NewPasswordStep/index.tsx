@@ -103,6 +103,7 @@ export default function NewPasswordStep() {
     updateNewPassword,
     updateNewPasswordConfirm,
     resetStore,
+    router,
   ]);
 
   const handleConfirmSubmit = useCallback(() => {
