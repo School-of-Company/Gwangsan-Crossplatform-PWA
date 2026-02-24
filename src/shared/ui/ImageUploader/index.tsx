@@ -1,10 +1,6 @@
-import { View, TouchableOpacity, Image, Text, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import * as ImagePicker from 'expo-image-picker';
-import { memo, useState, useCallback, useMemo, useEffect } from 'react';
+import { memo, useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useUploadImage } from '@/shared/model/useUploadImage';
 import { ImageType } from '@/shared/types/imageType';
-import Toast from 'react-native-toast-message';
 
 export interface ImageUploadState {
   readonly totalImages: number;
@@ -41,6 +37,7 @@ const ImageUploader = ({
   maxImages = 5,
 }: Props) => {
   const [imageStatuses, setImageStatuses] = useState<ImageStatus[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadImageMutation = useUploadImage();
 
   const uploadState = useMemo((): ImageUploadState => {
@@ -86,80 +83,47 @@ const ImageUploader = ({
     [images, imageStatuses, onImagesChange, onImageIdsChange]
   );
 
-  const pickImage = useCallback(async () => {
-    if (readonly || images.length >= maxImages) return;
+  const handleFileChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (fileInputRef.current) fileInputRef.current.value = '';
 
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Toast.show({
-        type: 'error',
-        text1: '권한 필요',
-        text2: '차일 접근 권한이 필요합니다.',
-      });
-      return;
-    }
+      const objectUrl = URL.createObjectURL(file);
+      const newImages = [...images, objectUrl];
+      onImagesChange?.(newImages);
 
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsMultipleSelection: false,
-        quality: 0.8,
-      });
+      const newStatus: ImageStatus = { uri: objectUrl, status: 'uploading' };
+      setImageStatuses((prev) => [...prev, newStatus]);
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const newImageUri = result.assets[0].uri;
-        const newImages = [...images, newImageUri];
-        onImagesChange?.(newImages);
+      try {
+        const uploadedImage = await uploadImageMutation.mutateAsync(file);
 
-        const newStatus: ImageStatus = {
-          uri: newImageUri,
-          status: 'uploading',
-        };
-        setImageStatuses((prev) => [...prev, newStatus]);
+        updateImageStatus(objectUrl, { status: 'uploaded', imageData: uploadedImage });
 
-        try {
-          const uploadedImage = await uploadImageMutation.mutateAsync(newImageUri);
+        const allUploadedStatuses = imageStatuses.filter(
+          (s) => s.status === 'uploaded' && s.imageData
+        );
+        const updatedStatuses = [
+          ...allUploadedStatuses,
+          { ...newStatus, status: 'uploaded' as const, imageData: uploadedImage },
+        ];
+        const imageIds = updatedStatuses.map((status) => status.imageData!.imageId);
+        onImageIdsChange?.(imageIds);
+      } catch (error) {
+        console.error(error);
+        updateImageStatus(objectUrl, {
+          status: 'failed',
+          error: error instanceof Error ? error : new Error('업로드 실패'),
+        });
 
-          updateImageStatus(newImageUri, {
-            status: 'uploaded',
-            imageData: uploadedImage,
-          });
-
-          const allUploadedStatuses = imageStatuses.filter(
-            (s) => s.status === 'uploaded' && s.imageData
-          );
-          const updatedStatuses = [
-            ...allUploadedStatuses,
-            { ...newStatus, status: 'uploaded' as const, imageData: uploadedImage },
-          ];
-          const imageIds = updatedStatuses.map((status) => status.imageData!.imageId);
-          onImageIdsChange?.(imageIds);
-        } catch (error) {
-          console.error(error);
-          updateImageStatus(newImageUri, {
-            status: 'failed',
-            error: error instanceof Error ? error : new Error('업로드 실패'),
-          });
-
-          setTimeout(() => {
-            removeImageByUri(newImageUri);
-          }, 1500);
-        }
+        setTimeout(() => {
+          removeImageByUri(objectUrl);
+        }, 1500);
       }
-    } catch (error) {
-      console.error('이미지 선택 중 오류:', error);
-    }
-  }, [
-    images,
-    maxImages,
-    readonly,
-    onImagesChange,
-    imageStatuses,
-    uploadImageMutation,
-    updateImageStatus,
-    removeImageByUri,
-    onImageIdsChange,
-  ]);
+    },
+    [images, imageStatuses, onImagesChange, uploadImageMutation, updateImageStatus, removeImageByUri, onImageIdsChange]
+  );
 
   const removeImage = useCallback(
     (index: number) => {
@@ -185,46 +149,60 @@ const ImageUploader = ({
   }, [readonly, images.length, maxImages, uploadState.hasUploadingImages]);
 
   return (
-    <View>
-      <Text className="mb-2 text-lg text-black">{title}</Text>
-      <View className="flex-row flex-wrap items-center gap-3">
+    <div>
+      <span className="mb-2 block text-lg text-black">{title}</span>
+      <div className="flex flex-row flex-wrap items-center gap-3">
         {images.map((uri, idx) => {
           const status = getImageStatus(uri);
           const isUploading = status?.status === 'uploading';
           const isFailed = status?.status === 'failed';
 
           return (
-            <TouchableOpacity
+            <button
               key={`${uri}-${idx}`}
-              onPress={() => removeImage(idx)}
+              type="button"
+              onClick={() => removeImage(idx)}
               disabled={readonly || isUploading}
               className="relative h-12 w-12">
-              <Image
-                source={{ uri }}
-                className={`h-12 w-12 rounded-full ${isFailed ? 'opacity-50' : ''}`}
+              <img
+                src={uri}
+                alt="업로드 이미지"
+                className={`h-12 w-12 rounded-full object-cover ${isFailed ? 'opacity-50' : ''}`}
               />
               {isUploading && (
-                <View className="absolute inset-0 items-center justify-center rounded-full bg-black/30">
-                  <ActivityIndicator color="#fff" size="small" />
-                </View>
+                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                </div>
               )}
               {isFailed && (
-                <View className="absolute inset-0 items-center justify-center rounded-full bg-red-500/70">
-                  <Icon name="close" size={16} color="#fff" />
-                </View>
+                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-red-500/70">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </div>
               )}
-            </TouchableOpacity>
+            </button>
           );
         })}
         {canAddMoreImages && (
-          <TouchableOpacity
-            onPress={pickImage}
-            className="h-12 w-12 items-center justify-center rounded-full bg-gray-50">
-            <Icon name="add" size={24} color="#111" />
-          </TouchableOpacity>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="#111" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
         )}
-      </View>
-    </View>
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+    </div>
   );
 };
 
