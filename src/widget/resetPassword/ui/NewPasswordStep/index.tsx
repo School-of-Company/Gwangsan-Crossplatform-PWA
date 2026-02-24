@@ -10,7 +10,7 @@ import { passwordSchema, passwordConfirmSchema } from '~/entity/auth/model/authS
 import { ZodError } from 'zod';
 import { resetPassword } from '~/entity/auth/api/resetPassword';
 import { useRouter } from 'expo-router';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 
 export default function NewPasswordStep() {
   const router = useRouter();
@@ -85,20 +85,15 @@ export default function NewPasswordStep() {
       updateNewPassword(localPassword);
       updateNewPasswordConfirm(localPasswordConfirm);
 
-      Toast.show({
-        type: 'success',
-        text1: '비밀번호가 성공적으로 변경되었습니다.\n새로운 비밀번호로 로그인해주세요.',
-      });
+      toast.success('비밀번호가 성공적으로 변경되었습니다.\n새로운 비밀번호로 로그인해주세요.');
       resetStore();
       router.replace('/signin');
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1:
-          error instanceof Error
-            ? error.message
-            : '비밀번호 재설정에 실패했습니다. 다시 시도해주세요.',
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : '비밀번호 재설정에 실패했습니다. 다시 시도해주세요.'
+      );
     } finally {
       setIsLoading(false);
     }
