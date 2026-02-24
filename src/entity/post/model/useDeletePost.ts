@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { deletePost } from '../api/deletePost';
 import { ProductType } from '~/shared/types/type';
 import { ModeType } from '~/shared/types/mode';
@@ -21,21 +21,11 @@ export const useDeletePost = ({ onSuccess }: UseDeletePostParams = {}) => {
         queryKey: ['posts'],
       });
 
-      Toast.show({
-        type: 'success',
-        text1: '게시글 삭제 완료',
-        text2: '게시글이 성공적으로 삭제되었습니다.',
-        visibilityTime: 2000,
-      });
+      toast.success('게시글이 성공적으로 삭제되었습니다.');
       onSuccess?.();
     },
     onError: (error) => {
-      Toast.show({
-        type: 'error',
-        text1: '게시글 삭제 실패',
-        text2: error instanceof Error ? error.message : '게시글 삭제 중 오류가 발생했습니다.',
-        visibilityTime: 3000,
-      });
+      toast.error(error instanceof Error ? error.message : '게시글 삭제 중 오류가 발생했습니다.');
     },
   });
 
