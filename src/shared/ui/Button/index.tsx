@@ -13,7 +13,7 @@ export const Button = ({
   disabled = false,
   variant = 'primary',
   style,
-  width = 'w-full',
+  width = 'w-auto',
   className,
   ...props
 }: ButtonProps) => {
