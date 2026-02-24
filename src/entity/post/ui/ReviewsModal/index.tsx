@@ -1,5 +1,4 @@
 import { useMemo, useCallback, memo, useState, useEffect } from 'react';
-import { View, Dimensions } from 'react-native';
 import { TextField } from '~/shared/ui/TextField';
 import { Button } from '~/shared/ui/Button';
 import { BottomSheetModalWrapper, ProgressBar } from '~/shared/ui';
@@ -54,30 +53,26 @@ const ReviewsModal = ({
     setLocalContents(text);
   }, []);
 
-  const maxTextFieldHeight = useMemo(() => Dimensions.get('window').height * 0.2, []);
-
   return (
     <BottomSheetModalWrapper
       isVisible={isVisible}
       onClose={onClose}
       onAnimationComplete={onAnimationComplete}
       title="후기 작성">
-      <View className="flex-1 flex-col justify-between gap-6">
-        <View className="gap-8">
+      <div className="flex flex-1 flex-col justify-between gap-6">
+        <div className="flex flex-col gap-8">
           <ProgressBar value={localLight} onChange={handleLightChange} />
           <TextField
             label="후기 작성"
             placeholder="거래의 후기를 입력해주세요"
             value={localContents}
             onChangeText={handleContentsChange}
-            multiline
-            style={{ maxHeight: maxTextFieldHeight }}
           />
-        </View>
-        <Button disabled={isDisabled} onPress={handleSubmit}>
+        </div>
+        <Button disabled={isDisabled} onClick={handleSubmit}>
           작성완료
         </Button>
-      </View>
+      </div>
     </BottomSheetModalWrapper>
   );
 };
