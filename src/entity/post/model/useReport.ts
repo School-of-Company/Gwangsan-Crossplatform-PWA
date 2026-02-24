@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useCallback, useState, useMemo } from 'react';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { report, type ReportRequest } from '../api/report';
 import { REPORT_TYPE_MAP } from './reportType';
 import type { ImageUploadState } from '@/shared/ui/ImageUploader';
@@ -28,22 +28,12 @@ export const useReport = ({ productId, memberId, onSuccess }: UseReportParams) =
   const reportMutation = useMutation({
     mutationFn: (data: ReportRequest) => report(data),
     onSuccess: () => {
-      Toast.show({
-        type: 'success',
-        text1: '신고 완료',
-        text2: '신고가 성공적으로 접수되었습니다.',
-        visibilityTime: 2000,
-      });
+      toast.success('신고가 성공적으로 접수되었습니다.');
       resetForm();
       onSuccess?.();
     },
     onError: (error) => {
-      Toast.show({
-        type: 'error',
-        text1: '신고 실패',
-        text2: error instanceof Error ? error.message : '신고 처리 중 오류가 발생했습니다.',
-        visibilityTime: 3000,
-      });
+      toast.error(error instanceof Error ? error.message : '신고 처리 중 오류가 발생했습니다.');
     },
   });
 
@@ -95,30 +85,17 @@ export const useReport = ({ productId, memberId, onSuccess }: UseReportParams) =
     (type: string, reason: string) => {
       const reportTypeKey = type as keyof typeof REPORT_TYPE_MAP;
       if (!reportTypeKey) {
-        Toast.show({
-          type: 'error',
-          text1: '잘못된 신고 유형',
-          text2: '올바른 신고 유형을 선택해주세요.',
-          visibilityTime: 3000,
-        });
+        toast.error('올바른 신고 유형을 선택해주세요.');
         return;
       }
 
       if (formState.imageUploadState?.hasUploadingImages) {
-        Toast.show({
-          type: 'error',
-          text1: '이미지 업로드가 완료될 때까지 기다려주세요.',
-          visibilityTime: 3000,
-        });
+        toast.error('이미지 업로드가 완료될 때까지 기다려주세요.');
         return;
       }
 
       if (formState.imageUploadState?.hasFailedImages) {
-        Toast.show({
-          type: 'error',
-          text1: '이미지 업로드 실패',
-          visibilityTime: 3000,
-        });
+        toast.error('이미지 업로드 실패');
         return;
       }
 
@@ -137,11 +114,7 @@ export const useReport = ({ productId, memberId, onSuccess }: UseReportParams) =
           imageIds: formState.imageIds,
         });
       } else {
-        Toast.show({
-          type: 'error',
-          text1: '신고 실패',
-          visibilityTime: 3000,
-        });
+        toast.error('신고 실패');
       }
     },
     [reportMutation, formState, productId, memberId]
