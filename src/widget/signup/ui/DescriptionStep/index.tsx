@@ -34,12 +34,6 @@ export default function DescriptionStep() {
     if (error) setError(null);
   };
 
-  const handleSubmit = () => {
-    if (description.trim().length >= 1) {
-      validateAndNext();
-    }
-  };
-
   return (
     <SignupForm
       title="회원가입"
@@ -51,11 +45,7 @@ export default function DescriptionStep() {
           label="자기소개"
           placeholder="자신을 소개하는 글을 작성해주세요."
           value={description}
-          onChangeText={handleDescriptionChange}
-          onSubmitEditing={handleSubmit}
-          returnKeyType="done"
-          multiline={true}
-          numberOfLines={6}
+          onChange={(e) => handleDescriptionChange(e.target.value)}
           maxLength={500}
         />
         <ErrorMessage error={error} />

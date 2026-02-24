@@ -28,7 +28,7 @@ const ItemFormGwangsan = ({
         label="광산"
         placeholder="광산을 입력해주세요"
         value={gwangsan}
-        onChangeText={onGwangsanChange}
+        onChange={(e) => onGwangsanChange?.(e.target.value)}
         editable={!readonly}
         keyboardType="numeric"
       />
