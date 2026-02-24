@@ -40,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className="flex w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         <label className="text-label">{label}</label>
         <div className="relative">
           <input
