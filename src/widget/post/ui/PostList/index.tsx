@@ -1,4 +1,3 @@
-import { RefreshControl } from 'react-native';
 import Post from '~/shared/ui/Post';
 import { ProductType } from '~/shared/types/type';
 import { ModeType } from '~/shared/types/mode';
@@ -6,7 +5,6 @@ import { useCallback, useState } from 'react';
 import { useGetPosts } from '~/shared/model/useGetPosts';
 import { returnValue } from '~/view/post/model/handleCategory';
 import { Category } from '~/view/post/model/category';
-import { VirtualList } from 'scrolloop/native';
 
 export default function PostList({ category, type }: { category: Category; type: ProductType }) {
   const [refreshing, setRefreshing] = useState(false);
@@ -26,23 +24,20 @@ export default function PostList({ category, type }: { category: Category; type:
     }
   }, [refetch]);
 
-  const renderItem = useCallback(
-    (index: number) => {
-      const item = data[index];
-      if (!item) return null;
-      return <Post {...item} />;
-    },
-    [data]
-  );
-
   return (
-    <VirtualList
-      decelerationRate={0}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      itemSize={120}
-      overscan={12}
-      count={data.length}
-      renderItem={renderItem}
-    />
+    <div className="w-full">
+      {refreshing && (
+        <div className="flex justify-center py-3">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#8FC31D] border-t-transparent" />
+        </div>
+      )}
+      {data.length === 0 ? (
+        <div className="flex items-center justify-center py-20">
+          <span className="text-gray-400">게시글이 없습니다.</span>
+        </div>
+      ) : (
+        data.map((item) => <Post key={item.id} {...item} />)
+      )}
+    </div>
   );
 }
