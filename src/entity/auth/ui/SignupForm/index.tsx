@@ -42,7 +42,7 @@ export default function SignupForm({
         <div className="mt-8 flex-1">{children}</div>
 
         <div className="mb-8 mt-auto">
-          <Button onClick={onNext} disabled={isNextDisabled}>
+          <Button onClick={onNext} disabled={isNextDisabled} width="w-full">
             {nextButtonText}
           </Button>
         </div>
