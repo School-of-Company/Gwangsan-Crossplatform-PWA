@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { Button } from '~/shared/ui/Button';
 
 interface NextButtonProps {
@@ -7,11 +6,11 @@ interface NextButtonProps {
 }
 
 const NextButton = ({ disabled, onPress }: NextButtonProps) => (
-  <View className="px-6">
-    <Button disabled={disabled} onPress={onPress}>
+  <div className="px-6">
+    <Button disabled={disabled} onClick={onPress}>
       다음
     </Button>
-  </View>
+  </div>
 );
 
 export default NextButton;
