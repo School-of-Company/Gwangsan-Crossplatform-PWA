@@ -1,5 +1,3 @@
-import { View, TouchableOpacity, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { router } from 'expo-router';
 
 interface Props {
@@ -26,28 +24,36 @@ export function Header({
   };
 
   return (
-    <View className="flex-row items-center justify-between px-3 py-6">
-      <TouchableOpacity onPress={handleBack} className="w-10 items-center justify-center">
-        <Icon name="chevron-back" size={24} color="#8F9094" />
-      </TouchableOpacity>
-      <View className="flex-1 flex-row items-center justify-center">
+    <div className="flex flex-row items-center justify-between px-3 py-6">
+      <button onClick={handleBack} className="w-10 flex items-center justify-center">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15 6L9.70711 11.2929C9.31658 11.6834 9.31658 12.3166 9.70711 12.7071L15 18"
+            stroke="#8F9094"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </button>
+      <div className="flex-1 flex flex-row items-center justify-center relative">
         {onTitlePress ? (
-          <TouchableOpacity onPress={onTitlePress} className="flex-1">
-            <Text className="text-center text-body1 text-black">{headerTitle}</Text>
-          </TouchableOpacity>
+          <button onClick={onTitlePress} className="flex-1">
+            <span className="block text-center text-body1 text-black">{headerTitle}</span>
+          </button>
         ) : (
-          <Text className="flex-1 text-center text-body1 text-black">{headerTitle}</Text>
+          <span className="flex-1 block text-center text-body1 text-black">{headerTitle}</span>
         )}
         {showMenuButton && (
-          <TouchableOpacity
-            onPress={onMenuPress}
-            className="absolute right-0 p-2"
-            style={{ right: 0 }}>
-            <Icon name="ellipsis-vertical" size={24} />
-          </TouchableOpacity>
+          <button onClick={onMenuPress} className="absolute right-0 p-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="5" r="1.5" fill="#000" />
+              <circle cx="12" cy="12" r="1.5" fill="#000" />
+              <circle cx="12" cy="19" r="1.5" fill="#000" />
+            </svg>
+          </button>
         )}
-      </View>
-      {!showMenuButton && <View className="size-6" />}
-    </View>
+      </div>
+      {!showMenuButton && <div className="size-6" />}
+    </div>
   );
 }
