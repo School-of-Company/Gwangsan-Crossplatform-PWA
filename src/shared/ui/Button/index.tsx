@@ -18,7 +18,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const buttonClasses = `
-    min-h-[56px] ${width} items-center justify-center rounded-lg px-8 py-4
+    min-h-[56px] ${width} flex items-center justify-center rounded-lg px-8 py-4
     ${
       disabled
         ? variant === 'primary'
