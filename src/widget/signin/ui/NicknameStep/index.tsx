@@ -58,7 +58,7 @@ export default function NicknameStep() {
           label="별칭"
           placeholder="별칭을 입력해주세요"
           value={nickname as string}
-          onChangeText={handleNicknameChange}
+          onChange={(e) => handleNicknameChange(e.target.value)}
           onSubmitEditing={handleSubmit}
           returnKeyType="next"
         />

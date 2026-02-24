@@ -106,7 +106,7 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
           {showReviewButton && product.isCompleted && (
             <Button
               variant="primary"
-              onPress={onReviewButtonPress}
+              onClick={onReviewButtonPress}
               width="w-full"
               style={{ minHeight: 40 }}>
               <Text className="text-sm font-medium text-white">리뷰 작성하기</Text>
@@ -118,7 +118,7 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
                 {isReserved ? (
                   <Button
                     variant="secondary"
-                    onPress={handleCancelReservation}
+                    onClick={handleCancelReservation}
                     disabled={localLoading || isLoading}
                     width="w-[48%]"
                     style={{ minHeight: 40 }}>
@@ -131,7 +131,7 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
                 ) : (
                   <Button
                     variant="secondary"
-                    onPress={handleReservation}
+                    onClick={handleReservation}
                     disabled={localLoading || isLoading}
                     width="w-[48%]"
                     style={{ minHeight: 40 }}>
@@ -145,7 +145,7 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
 
                 <Button
                   variant="primary"
-                  onPress={handleTradeAccept}
+                  onClick={handleTradeAccept}
                   disabled={localLoading || isLoading}
                   width="w-[48%]"
                   style={{ minHeight: 40 }}>

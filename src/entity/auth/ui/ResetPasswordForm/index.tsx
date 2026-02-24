@@ -1,16 +1,7 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-} from 'react-native';
 import { Button } from '@/shared/ui/Button';
 import { ReactNode, memo } from 'react';
 import { useResetPasswordStepNavigation } from '~/entity/auth/model/useAuthSelectors';
 import BackArrow from '@/shared/assets/svg/BackArrow';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ResetPasswordFormProps {
   title: string;
@@ -34,40 +25,31 @@ function ResetPasswordForm({
   const { prevStep } = useResetPasswordStepNavigation();
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 bg-white"
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
-          <View className="flex-1 gap-8 px-6">
-            <View className="flex-row items-center pt-4">
-              <TouchableOpacity className="flex-row items-center" onPress={onBack || prevStep}>
-                <BackArrow />
-                <Text className="ml-2 text-gray-500">뒤로</Text>
-              </TouchableOpacity>
-            </View>
+    <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex flex-1 flex-col gap-8 overflow-y-auto px-6">
+        <div className="flex flex-row items-center pt-4">
+          <button
+            className="flex flex-row items-center bg-transparent"
+            onClick={onBack || prevStep}>
+            <BackArrow />
+            <span className="ml-2 text-gray-500">뒤로</span>
+          </button>
+        </div>
 
-            <View>
-              <Text className="text-3xl font-bold">{title}</Text>
-              <Text className="mt-4 text-lg text-gray-700">{description}</Text>
-            </View>
+        <div>
+          <h1 className="text-3xl font-bold">{title}</h1>
+          <p className="mt-4 text-lg text-gray-700">{description}</p>
+        </div>
 
-            <View className="mt-8 flex-1">{children}</View>
+        <div className="mt-8 flex-1">{children}</div>
 
-            <View className="mb-8 mt-auto">
-              <Button onPress={onNext} disabled={isNextDisabled}>
-                {nextButtonText}
-              </Button>
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        <div className="mb-8 mt-auto">
+          <Button onClick={onNext} disabled={isNextDisabled} width="w-full">
+            {nextButtonText}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 

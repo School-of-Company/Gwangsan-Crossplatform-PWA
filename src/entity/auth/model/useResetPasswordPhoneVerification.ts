@@ -1,10 +1,9 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { TextInput } from 'react-native';
 import { phoneSchema, verificationCodeSchema } from '~/entity/auth/model/authSchema';
 import { sendPasswordResetSms } from '~/entity/auth/api/sendPasswordResetSms';
 import { verifyPasswordResetSms } from '~/entity/auth/api/verifyPasswordResetSms';
 import { ZodError } from 'zod';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { getErrorMessage } from '~/shared/lib/errorHandler';
 
 interface VerificationState {
@@ -26,7 +25,7 @@ export const useResetPasswordPhoneVerification = ({
   onSuccess,
 }: UseResetPasswordPhoneVerificationProps) => {
   const isMountedRef = useRef(true);
-  const verificationRef = useRef<TextInput>(null);
+  const verificationRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [phoneNumber, setPhoneNumber] = useState((initialPhoneNumber as string) || '');
@@ -78,11 +77,7 @@ export const useResetPasswordPhoneVerification = ({
         }));
       });
 
-      Toast.show({
-        type: 'success',
-        text1: '인증번호 전송 완료',
-        text2: '전화번호로 인증번호가 전송되었습니다.',
-      });
+      toast.success('전화번호로 인증번호가 전송되었습니다.');
 
       timeoutRef.current = setTimeout(() => {
         if (isMountedRef.current) {
@@ -96,11 +91,7 @@ export const useResetPasswordPhoneVerification = ({
         } else {
           const errorMessage = getErrorMessage(err);
           setPhoneError(errorMessage);
-          Toast.show({
-            type: 'error',
-            text1: '인증번호 전송 실패',
-            text2: errorMessage,
-          });
+          toast.error(`인증번호 전송 실패: ${errorMessage}`);
         }
         setVerificationState((prev) => ({ ...prev, isSendingCode: false }));
       });
@@ -126,11 +117,7 @@ export const useResetPasswordPhoneVerification = ({
         code: verificationCode,
       });
 
-      Toast.show({
-        type: 'success',
-        text1: '인증 완료',
-        text2: '전화번호 인증이 완료되었습니다.',
-      });
+      toast.success('전화번호 인증이 완료되었습니다.');
 
       onSuccess(phoneNumber, verificationCode);
       return true;
@@ -141,11 +128,7 @@ export const useResetPasswordPhoneVerification = ({
         } else {
           const errorMessage = getErrorMessage(err);
           setVerificationError(errorMessage);
-          Toast.show({
-            type: 'error',
-            text1: '인증 실패',
-            text2: errorMessage,
-          });
+          toast.error(`인증 실패: ${errorMessage}`);
         }
         setVerificationState((prev) => ({ ...prev, isVerifyingCode: false }));
       });

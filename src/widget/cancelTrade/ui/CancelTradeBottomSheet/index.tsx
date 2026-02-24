@@ -85,8 +85,7 @@ const CancelTradeBottomSheet = ({
             label="거래철회사유"
             placeholder="거래철회사유를 입력해주세요"
             value={reason}
-            onChangeText={setReason}
-            multiline
+            onChange={(e) => setReason(e.target.value)}
             style={{ maxHeight: maxTextFieldHeight }}
           />
 
@@ -101,7 +100,7 @@ const CancelTradeBottomSheet = ({
           </View>
         </View>
 
-        <Button variant="error" disabled={isFormDisabled} onPress={handleFormSubmit}>
+        <Button variant="error" disabled={isFormDisabled} onClick={handleFormSubmit}>
           {getSubmitButtonText}
         </Button>
       </View>

@@ -44,7 +44,7 @@ export default function SigninForm({
             <div className="mt-8 flex-1">{children}</div>
 
             <div className="mb-8 mt-auto">
-              <Button onPress={onNext} disabled={isNextDisabled}>
+              <Button onClick={onNext} disabled={isNextDisabled}>
                 {nextButtonText}
               </Button>
             </div>

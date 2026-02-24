@@ -107,8 +107,7 @@ const ReportModal = ({
             label="신고사유"
             placeholder="신고사유를 입력해주세요"
             value={contents}
-            onChangeText={setContents}
-            multiline
+            onChange={(e) => setContents(e.target.value)}
             style={{ maxHeight: maxTextFieldHeight }}
           />
 
@@ -123,7 +122,7 @@ const ReportModal = ({
           </View>
         </View>
 
-        <Button variant="error" disabled={isFormDisabled} onPress={handleFormSubmit}>
+        <Button variant="error" disabled={isFormDisabled} onClick={handleFormSubmit}>
           {getSubmitButtonText}
         </Button>
       </View>
