@@ -1,6 +1,4 @@
 import { useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePostAction } from '@/widget/post/model/usePostAction';
 import { PostPageContent } from '@/widget/post/ui/PostPageContent';
 import ReportModal from '~/entity/post/ui/ReportModal';
@@ -32,22 +30,22 @@ export default function PostPageView() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#8FC31D" />
-      </SafeAreaView>
+      <div className="flex flex-1 items-center justify-center bg-white">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#8FC31D] border-t-transparent" />
+      </div>
     );
   }
 
   if (error || !data) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <Text className="text-error-500">게시글을 불러오는데 실패했습니다.</Text>
-      </SafeAreaView>
+      <div className="flex flex-1 items-center justify-center bg-white">
+        <span className="text-error-500">게시글을 불러오는데 실패했습니다.</span>
+      </div>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex flex-1 flex-col bg-white">
       <Header headerTitle={computedValues.headerTitle} />
 
       <PostPageContent
@@ -85,6 +83,6 @@ export default function PostPageView() {
         onContentsChange={reviewHandlers.onContentsChange}
         onAnimationComplete={reviewHandlers.onAnimationComplete}
       />
-    </SafeAreaView>
+    </div>
   );
 }
