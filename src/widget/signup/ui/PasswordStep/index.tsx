@@ -76,7 +76,7 @@ export default function PasswordStep() {
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요"
           value={password as string}
-          onChange={(e) => handlePasswordChange(e.target.value)}
+          onChangeText={handlePasswordChange}
           secureTextEntry={true}
           returnKeyType="next"
         />
@@ -88,7 +88,7 @@ export default function PasswordStep() {
           label="비밀번호 재입력"
           placeholder="비밀번호를 다시 입력해주세요"
           value={passwordConfirm as string}
-          onChange={(e) => handleConfirmChange(e.target.value)}
+          onChangeText={handleConfirmChange}
           onSubmitEditing={handleConfirmSubmit}
           secureTextEntry={true}
           returnKeyType="done"

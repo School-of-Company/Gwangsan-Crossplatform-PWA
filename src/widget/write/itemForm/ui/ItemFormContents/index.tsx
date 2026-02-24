@@ -61,15 +61,15 @@ const ItemFormContents = ({
             label="주제"
             placeholder="주제를 작성해주세요"
             value={title}
-            onChange={(e) => onTitleChange?.(e.target.value)}
-            disabled={readonly}
+            onChangeText={onTitleChange}
+            editable={!readonly}
           />
           <TextField
             label="내용"
             placeholder="내용을 작성해주세요"
             value={content}
-            onChange={(e) => onContentChange?.(e.target.value)}
-            disabled={readonly}
+            onChangeText={onContentChange}
+            editable={!readonly}
           />
         </View>
       </View>

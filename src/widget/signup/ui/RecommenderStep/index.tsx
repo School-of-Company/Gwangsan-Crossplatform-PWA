@@ -51,7 +51,7 @@ export default function RecommenderStep() {
           label="추천인"
           placeholder="추천인 별칭을 입력해주세요"
           value={recommender}
-          onChange={(e) => handleRecommenderChange(e.target.value)}
+          onChangeText={handleRecommenderChange}
           onSubmitEditing={handleSubmit}
           returnKeyType="done"
         />

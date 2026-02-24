@@ -69,11 +69,12 @@ const ReviewsModal = ({
             label="후기 작성"
             placeholder="거래의 후기를 입력해주세요"
             value={localContents}
-            onChange={(e) => handleContentsChange(e.target.value)}
+            onChangeText={handleContentsChange}
+            multiline
             style={{ maxHeight: maxTextFieldHeight }}
           />
         </View>
-        <Button disabled={isDisabled} onClick={handleSubmit}>
+        <Button disabled={isDisabled} onPress={handleSubmit}>
           작성완료
         </Button>
       </View>

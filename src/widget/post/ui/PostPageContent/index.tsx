@@ -78,7 +78,7 @@ export const PostPageContent: React.FC<PostPageContentProps> = ({
 
         <View className="w-full flex-row justify-center gap-4">
           {review === '1' ? (
-            <Button variant="primary" width="w-full" onClick={onReviewButtonPress}>
+            <Button variant="primary" width="w-full" onPress={onReviewButtonPress}>
               리뷰 작성
             </Button>
           ) : (
@@ -87,20 +87,20 @@ export const PostPageContent: React.FC<PostPageContentProps> = ({
                 <Button
                   variant="secondary"
                   width="w-1/2"
-                  onClick={onChatPress}
+                  onPress={onChatPress}
                   disabled={isChatLoading}>
                   {isChatLoading ? '채팅방 생성 중...' : '채팅하기'}
                 </Button>
               )}
               {isMyPost ? (
-                <Button variant="primary" width="w-[100%]" onClick={onEditPress}>
+                <Button variant="primary" width="w-[100%]" onPress={onEditPress}>
                   수정하기
                 </Button>
               ) : (
                 <Button
                   variant="primary"
                   width="w-1/2"
-                  onClick={onTradeRequest}
+                  onPress={onTradeRequest}
                   disabled={computedValues.isTradeButtonDisabled}>
                   {computedValues.tradeButtonText}
                 </Button>

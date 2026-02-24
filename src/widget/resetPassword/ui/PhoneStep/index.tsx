@@ -6,11 +6,11 @@ import {
   useResetPasswordFormField,
   useResetPasswordStepNavigation,
 } from '~/entity/auth/model/useAuthSelectors';
+import { Text, View } from 'react-native';
 import { useResetPasswordPhoneVerification } from '~/entity/auth/model/useResetPasswordPhoneVerification';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 
 export default function PhoneStep() {
-  const router = useRouter();
   const { value: initialPhoneNumber, updateField: updatePhoneNumber } =
     useResetPasswordFormField('phoneNumber');
   const { value: initialVerificationCode, updateField: updateVerificationCode } =
@@ -56,55 +56,49 @@ export default function PhoneStep() {
       onNext={verifyCode}
       onBack={handleBack}
       isNextDisabled={!isVerificationComplete}>
-      <div>
-        <div className="flex flex-row items-end gap-2">
-          <div className="flex-1">
+      <View>
+        <View className="flex-row items-end gap-2">
+          <View className="flex-1">
             <Input
               label="전화번호"
               placeholder="전화번호를 입력해주세요"
               value={phoneNumber}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handlePhoneChange(e.target.value)
-              }
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-                e.key === 'Enter' && handlePhoneSubmit()
-              }
-              type="tel"
+              onChangeText={handlePhoneChange}
+              onSubmitEditing={handlePhoneSubmit}
+              keyboardType="numeric"
               maxLength={11}
-              disabled={verificationState.isSendingCode}
+              returnKeyType="done"
+              editable={!verificationState.isSendingCode}
             />
-          </div>
+          </View>
           <Button
             className={`h-16 items-center justify-center rounded-xl px-8 ${
               buttonState.canSend ? 'bg-[#8FC31D]' : 'bg-gray-300'
             }`}
-            onClick={requestVerification}
+            onPress={requestVerification}
             disabled={buttonState.isDisabled}>
-            <span className="font-medium text-white">{buttonState.text}</span>
+            <Text className="font-medium text-white">{buttonState.text}</Text>
           </Button>
-        </div>
+        </View>
         <ErrorMessage error={phoneError} />
-      </div>
+      </View>
 
       {verificationState.isVerifying && (
-        <div className="mt-4">
+        <View className="mt-4">
           <Input
             ref={verificationRef}
             label="전화번호 인증"
             placeholder="인증번호를 입력해주세요"
             value={verificationCode}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleVerificationChange(e.target.value)
-            }
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-              e.key === 'Enter' && handleVerificationSubmit()
-            }
-            type="tel"
-            disabled={verificationState.isVerifyingCode}
+            onChangeText={handleVerificationChange}
+            onSubmitEditing={handleVerificationSubmit}
+            keyboardType="numeric"
+            returnKeyType="done"
+            editable={!verificationState.isVerifyingCode}
             maxLength={6}
           />
           <ErrorMessage error={verificationError} />
-        </div>
+        </View>
       )}
     </ResetPasswordForm>
   );

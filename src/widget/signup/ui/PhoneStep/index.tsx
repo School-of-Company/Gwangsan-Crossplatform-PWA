@@ -52,7 +52,7 @@ export default function PhoneStep() {
               label="전화번호"
               placeholder="전화번호를 입력해주세요"
               value={phoneNumber}
-              onChange={(e) => handlePhoneChange(e.target.value)}
+              onChangeText={handlePhoneChange}
               onSubmitEditing={handlePhoneSubmit}
               keyboardType="numeric"
               maxLength={11}
@@ -64,7 +64,7 @@ export default function PhoneStep() {
             className={`h-16 items-center justify-center rounded-xl px-8 ${
               buttonState.canSend ? 'bg-[#8FC31D]' : 'bg-gray-300'
             }`}
-            onClick={requestVerification}
+            onPress={requestVerification}
             disabled={buttonState.isDisabled}>
             <span className="font-medium text-white">{buttonState.text}</span>
           </Button>
@@ -79,7 +79,7 @@ export default function PhoneStep() {
             label="전화번호 인증"
             placeholder="인증번호를 입력해주세요"
             value={verificationCode}
-            onChange={(e) => handleVerificationChange(e.target.value)}
+            onChangeText={handleVerificationChange}
             onSubmitEditing={handleVerificationSubmit}
             keyboardType="numeric"
             returnKeyType="done"

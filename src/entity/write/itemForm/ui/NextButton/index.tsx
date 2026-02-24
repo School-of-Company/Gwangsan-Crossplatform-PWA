@@ -8,7 +8,7 @@ interface NextButtonProps {
 
 const NextButton = ({ disabled, onPress }: NextButtonProps) => (
   <View className="px-6">
-    <Button disabled={disabled} onClick={onPress}>
+    <Button disabled={disabled} onPress={onPress}>
       다음
     </Button>
   </View>

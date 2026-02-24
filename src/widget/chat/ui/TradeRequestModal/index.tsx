@@ -35,13 +35,13 @@ const TradeRequestModalComponent: React.FC<TradeRequestModalProps> = ({
         </View>
 
         <View className="flex-row gap-3">
-          <Button variant="secondary" onClick={onClose} width="flex-1" disabled={isLoading}>
+          <Button variant="secondary" onPress={onClose} width="flex-1" disabled={isLoading}>
             <Text className="text-gray-700">취소</Text>
           </Button>
 
           <Button
             variant="primary"
-            onClick={handleTradeRequest}
+            onPress={handleTradeRequest}
             disabled={isLoading}
             width="flex-1">
             <Text className="text-white">{isLoading ? '요청 중...' : '거래 요청하기'}</Text>

@@ -64,7 +64,7 @@ export default function DongStep() {
           label=""
           placeholder="동네를 검색해주세요"
           value={searchText}
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChangeText={handleSearchChange}
           onSubmitEditing={handleSearchSubmit}
           icon={<SearchIcon />}
           onFocus={() => setShowResults(true)}

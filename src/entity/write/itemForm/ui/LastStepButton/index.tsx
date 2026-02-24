@@ -16,12 +16,12 @@ const LastStepButton = ({
 }: LastStepButtonProps) => (
   <View className="flex flex-row gap-6 px-6 pt-16">
     <View className="flex-1">
-      <Button onClick={onEditPress} disabled={disabled}>
+      <Button onPress={onEditPress} disabled={disabled}>
         수정
       </Button>
     </View>
     <View className="flex-1">
-      <Button variant="secondary" onClick={onCompletePress} disabled={disabled}>
+      <Button variant="secondary" onPress={onCompletePress} disabled={disabled}>
         {buttonText}
       </Button>
     </View>

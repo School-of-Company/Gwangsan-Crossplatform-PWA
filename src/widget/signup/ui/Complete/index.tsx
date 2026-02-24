@@ -66,7 +66,7 @@ export default function Complete() {
           <p className="mt-4 text-center text-gray-700">{error}</p>
         </div>
         <div className="mb-8 mt-auto gap-4">
-          <Button onClick={handleRetry}>다시 시도</Button>
+          <Button onPress={handleRetry}>다시 시도</Button>
         </div>
       </div>
     );
@@ -79,7 +79,7 @@ export default function Complete() {
         <h2 className="text-center text-2xl font-bold text-[#0075C2]">회원가입이 완료되었습니다</h2>
       </div>
       <div className="mb-8 mt-auto">
-        <Button onClick={handleNext}>로그인 페이지로 돌아가기</Button>
+        <Button onPress={handleNext}>로그인 페이지로 돌아가기</Button>
       </div>
     </div>
   );
