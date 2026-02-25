@@ -66,7 +66,7 @@ const ReviewsModal = ({
             label="후기 작성"
             placeholder="거래의 후기를 입력해주세요"
             value={localContents}
-            onChangeText={handleContentsChange}
+            onChange={(e) => handleContentsChange(e.target.value)}
           />
         </div>
         <Button disabled={isDisabled} onClick={handleSubmit}>

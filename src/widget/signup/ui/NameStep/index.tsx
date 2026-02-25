@@ -57,7 +57,7 @@ export default function NameStep() {
           label="이름"
           placeholder="본인의 이름을 입력해주세요"
           value={name as string}
-          onChangeText={handleNameChange}
+          onChange={(e) => handleNameChange(e.target.value)}
           onSubmitEditing={handleSubmit}
           returnKeyType="next"
         />

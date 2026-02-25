@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { Input } from '~/shared/ui/Input';
 import { memo } from 'react';
 import ImageUploader, { ImageUploadState } from '~/shared/ui/ImageUploader';
@@ -23,12 +22,12 @@ const ItemFormGwangsan = ({
   onImagesChange,
 }: Props) => {
   return (
-    <View className="flex gap-4 px-6">
+    <div className="flex gap-4 px-6">
       <Input
         label="광산"
         placeholder="광산을 입력해주세요"
         value={gwangsan}
-        onChangeText={onGwangsanChange}
+        onChange={(e) => onGwangsanChange?.(e.target.value)}
         editable={!readonly}
         keyboardType="numeric"
       />
@@ -39,7 +38,7 @@ const ItemFormGwangsan = ({
         onUploadStateChange={onImageUploadStateChange}
         readonly={readonly}
       />
-    </View>
+    </div>
   );
 };
 

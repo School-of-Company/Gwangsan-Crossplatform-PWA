@@ -104,7 +104,7 @@ const ReportModal = ({
             label="신고사유"
             placeholder="신고사유를 입력해주세요"
             value={contents}
-            onChangeText={setContents}
+            onChange={(e) => setContents(e.target.value)}
           />
 
           <div>
