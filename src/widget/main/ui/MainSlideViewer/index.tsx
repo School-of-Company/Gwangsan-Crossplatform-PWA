@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Image, Dimensions, ScrollView } from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
 
 import image1 from '@/shared/assets/png/mainSlides/slide1.png';
 import image2 from '@/shared/assets/png/mainSlides/slide2.png';
@@ -9,47 +8,44 @@ import image5 from '@/shared/assets/png/mainSlides/slide5.png';
 import image6 from '@/shared/assets/png/mainSlides/slide6.png';
 
 const images = [image1, image2, image3, image4, image5, image6];
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const MainSlideViewer = () => {
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const scrollViewRef = useRef<ScrollView | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    let current = 0;
-    intervalRef.current = setInterval(() => {
-      current = (current + 1) % images.length;
-      scrollViewRef.current?.scrollTo({ x: SCREEN_WIDTH * current, animated: true });
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
     }, 3000);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
+    return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        left: containerRef.current.offsetWidth * currentIndex,
+        behavior: 'smooth',
+      });
+    }
+  }, [currentIndex]);
+
   return (
-    <View className="flex flex-col items-center justify-center gap-2 border-b border-b-gray-400 py-6">
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}>
+    <div className="flex flex-col items-center justify-center gap-2 border-b border-gray-400 py-6">
+      <div
+        ref={containerRef}
+        className="scrollbar-hide flex w-full snap-x snap-mandatory overflow-x-auto scroll-smooth">
         {images.map((img, idx) => (
-          <Image
-            key={idx}
-            source={img}
-            style={{
-              width: SCREEN_WIDTH,
-              height: 210,
-              resizeMode: 'contain',
-            }}
-          />
+          <div key={idx} className="w-full flex-shrink-0 snap-center">
+            <img
+              src={typeof img === 'string' ? img : (img as any).src || (img as any).uri || ''}
+              alt={`슬라이드 ${idx + 1}`}
+              className="h-[210px] w-full object-contain"
+            />
+          </div>
         ))}
-      </ScrollView>
-    </View>
+      </div>
+    </div>
   );
 };
 
