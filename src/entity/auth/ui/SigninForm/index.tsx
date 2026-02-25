@@ -27,14 +27,12 @@ export default function SigninForm({
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <div className="flex flex-1 flex-col gap-8 px-6">
-        <div className="flex flex-row items-center pt-4">
-          <button
-            className="flex flex-row items-center bg-transparent"
-            onClick={onBack || prevStep}>
-            <BackArrow />
-            <span className="ml-2 text-gray-500">뒤로</span>
-          </button>
-        </div>
+        <button
+          className="flex flex-row items-center bg-transparent pt-4"
+          onClick={onBack || prevStep}>
+          <BackArrow />
+          <span className="ml-2 text-gray-500">뒤로</span>
+        </button>
 
         <div>
           <h1 className="text-3xl font-bold">{title}</h1>
@@ -43,11 +41,9 @@ export default function SigninForm({
 
         <div className="mt-8 flex-1">{children}</div>
 
-        <div className="mb-8 mt-auto">
-          <Button onClick={onNext} disabled={isNextDisabled} width="w-full">
-            {nextButtonText}
-          </Button>
-        </div>
+        <Button onClick={onNext} disabled={isNextDisabled} width="w-full" className="mb-8 mt-auto">
+          {nextButtonText}
+        </Button>
       </div>
     </div>
   );
