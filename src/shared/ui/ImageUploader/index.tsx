@@ -122,7 +122,15 @@ const ImageUploader = ({
         }, 1500);
       }
     },
-    [images, imageStatuses, onImagesChange, uploadImageMutation, updateImageStatus, removeImageByUri, onImageIdsChange]
+    [
+      images,
+      imageStatuses,
+      onImagesChange,
+      uploadImageMutation,
+      updateImageStatus,
+      removeImageByUri,
+      onImageIdsChange,
+    ]
   );
 
   const removeImage = useCallback(
@@ -177,7 +185,12 @@ const ImageUploader = ({
               {isFailed && (
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-red-500/70">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M12 4L4 12M4 4L12 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                    <path
+                      d="M12 4L4 12M4 4L12 12"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </div>
               )}

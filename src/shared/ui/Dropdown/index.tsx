@@ -31,26 +31,38 @@ export function Dropdown<T extends string>({
       {label && <span className="text-label text-black">{label}</span>}
       <button
         type="button"
-        className={`rounded-xl border ${show ? 'border-sub2-500' : 'border-gray-400'} px-4 py-5 text-body5 text-left`}
+        className={`rounded-xl border ${show ? 'border-sub2-500' : 'border-gray-400'} px-4 py-5 text-left text-body5`}
         onClick={() => setShow((prev) => !prev)}>
         <div className="flex flex-row items-center justify-between">
           <span>{selectedLabel || placeholder || '선택해주세요'}</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             {show ? (
-              <path d="M3 10L8 5L13 10" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 10L8 5L13 10"
+                stroke="#000"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             ) : (
-              <path d="M3 6L8 11L13 6" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 6L8 11L13 6"
+                stroke="#000"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             )}
           </svg>
         </div>
       </button>
       {show && (
-        <div className="absolute left-0 top-full z-50 w-full rounded-xl border border-gray-300 bg-gray-50 overflow-auto max-h-[200px]">
+        <div className="absolute left-0 top-full z-50 max-h-[200px] w-full overflow-auto rounded-xl border border-gray-300 bg-gray-50">
           {items.map((item, i) => (
             <button
               key={item.value}
               type="button"
-              className={`w-full text-left border-b border-gray-300 bg-gray-50 px-4 py-5 hover:bg-gray-100 ${i === 0 ? 'rounded-t-xl' : ''} ${i === items.length - 1 ? 'rounded-b-xl border-b-0' : ''}`}
+              className={`w-full border-b border-gray-300 bg-gray-50 px-4 py-5 text-left hover:bg-gray-100 ${i === 0 ? 'rounded-t-xl' : ''} ${i === items.length - 1 ? 'rounded-b-xl border-b-0' : ''}`}
               onClick={() => {
                 setSelected(item.value);
                 if (onSelect) {

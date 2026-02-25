@@ -26,8 +26,8 @@ const ProgressBar = ({ value, onChange, min = 0, max = 100, step = 1 }: Progress
   return (
     <div className="w-full">
       <span className="text-label text-black">밝기</span>
-      <div className="relative mt-2 flex items-center h-12">
-        <div className="relative w-full h-[6px] rounded bg-[#F1F5F9]">
+      <div className="relative mt-2 flex h-12 items-center">
+        <div className="relative h-[6px] w-full rounded bg-[#F1F5F9]">
           <div
             className="absolute left-0 top-0 h-full rounded bg-sub2-500"
             style={{ width: `${percentage}%` }}
@@ -40,11 +40,11 @@ const ProgressBar = ({ value, onChange, min = 0, max = 100, step = 1 }: Progress
           step={step}
           value={localValue}
           onChange={handleChange}
-          className="absolute w-full h-12 opacity-0 cursor-pointer"
+          className="absolute h-12 w-full cursor-pointer opacity-0"
           style={{ zIndex: 1 }}
         />
         <div
-          className="absolute w-6 h-6 rounded-full border-2 border-sub2-500 bg-white shadow pointer-events-none"
+          className="pointer-events-none absolute h-6 w-6 rounded-full border-2 border-sub2-500 bg-white shadow"
           style={{ left: `calc(${percentage}% - 12px)` }}
         />
       </div>

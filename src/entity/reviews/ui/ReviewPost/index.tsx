@@ -27,7 +27,12 @@ export default function ReviewPost({ review }: ReviewPostProps) {
       className="flex w-full flex-row gap-9 border-b border-b-gray-200 px-6 py-3 text-left hover:bg-gray-50">
       {Array.isArray(review.images) && review.images.length > 0 ? (
         review.images.map((image, index) => (
-          <img key={index} src={image.imageUrl} alt="리뷰 이미지" className="size-24 rounded-lg object-cover" />
+          <img
+            key={index}
+            src={image.imageUrl}
+            alt="리뷰 이미지"
+            className="size-24 rounded-lg object-cover"
+          />
         ))
       ) : (
         <img src={logoSrc} alt="기본 이미지" className="size-[100px] object-cover" />
@@ -39,7 +44,7 @@ export default function ReviewPost({ review }: ReviewPostProps) {
             className={clsx('absolute mx-1 h-2 rounded-xl', getLightColor(review.light))}
           />
         </div>
-        <span className="mb-1 max-w-[200px] text-label text-[#555555] break-words">
+        <span className="mb-1 max-w-[200px] break-words text-label text-[#555555]">
           {review.content}
         </span>
         <span className="text-label">{review.reviewerName}</span>

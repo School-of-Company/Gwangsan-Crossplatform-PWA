@@ -25,7 +25,7 @@ export function Header({
 
   return (
     <div className="flex flex-row items-center justify-between px-3 py-6">
-      <button onClick={handleBack} className="w-10 flex items-center justify-center">
+      <button onClick={handleBack} className="flex w-10 items-center justify-center">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
             d="M15 6L9.70711 11.2929C9.31658 11.6834 9.31658 12.3166 9.70711 12.7071L15 18"
@@ -35,13 +35,13 @@ export function Header({
           />
         </svg>
       </button>
-      <div className="flex-1 flex flex-row items-center justify-center relative">
+      <div className="relative flex flex-1 flex-row items-center justify-center">
         {onTitlePress ? (
           <button onClick={onTitlePress} className="flex-1">
             <span className="block text-center text-body1 text-black">{headerTitle}</span>
           </button>
         ) : (
-          <span className="flex-1 block text-center text-body1 text-black">{headerTitle}</span>
+          <span className="block flex-1 text-center text-body1 text-black">{headerTitle}</span>
         )}
         {showMenuButton && (
           <button onClick={onMenuPress} className="absolute right-0 p-2">

@@ -45,7 +45,7 @@ export default function PostView() {
             key={v}
             type="button"
             onClick={() => setCategory(v as Category)}
-            className="absolute flex h-8 items-center justify-center rounded-[32px] z-10"
+            className="absolute z-10 flex h-8 items-center justify-center rounded-[32px]"
             style={{
               left: `${index * segmentPercent + 1}%`,
               width: `${segmentPercent - 2}%`,

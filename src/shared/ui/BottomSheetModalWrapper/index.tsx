@@ -49,7 +49,7 @@ export function BottomSheetModalWrapper({
       style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
       onClick={onClose}>
       <div
-        className={`rounded-t-2xl bg-white transition-transform duration-250 ease-out ${
+        className={`duration-250 rounded-t-2xl bg-white transition-transform ease-out ${
           isVisible && !animating ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={modalStyle}
