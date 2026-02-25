@@ -29,8 +29,8 @@ const ItemFormContents = ({
 }: Props) => {
   return (
     <div className="px-6">
-      <div className="gap-4">
-        <div className="gap-8">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           <Dropdown
             onSelect={onTypeChange}
             selectedItem={type}
