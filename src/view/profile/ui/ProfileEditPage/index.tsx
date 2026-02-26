@@ -1,6 +1,4 @@
-import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header, Input, Button } from '~/shared/ui';
 import { TextField } from '~/shared/ui/TextField';
 import SpecialtiesDropdown from '~/entity/auth/ui/SpecialtiesDropdown';
@@ -8,7 +6,7 @@ import { SPECIALTIES } from '~/shared/consts/specialties';
 import { useGetMyProfile } from '../../model/useGetMyProfile';
 import { useUpdateProfile } from '../../model/useUpdateProfile';
 import { profileEditSchema } from '~/entity/auth/model/authSchema';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 
 export default function ProfileEditPageView() {
   const [nickname, setNickname] = useState('');
@@ -37,11 +35,7 @@ export default function ProfileEditPageView() {
       updateProfileMutation.mutate(validatedData);
     } catch (error: any) {
       if (error.errors && error.errors.length > 0) {
-        Toast.show({
-          type: 'error',
-          text1: '입력 오류',
-          text2: error.errors[0].message,
-        });
+        toast.error(error.errors[0].message);
       }
     }
   };
@@ -51,21 +45,21 @@ export default function ProfileEditPageView() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-white">
+      <div className="flex min-h-screen flex-col bg-white">
         <Header headerTitle="내 정보 수정" />
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
-      </SafeAreaView>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#0075C2] border-t-transparent"></div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Header headerTitle="내 정보 수정" />
 
-      <ScrollView className="flex-1 px-6 py-4" showsVerticalScrollIndicator={false}>
-        <View className="gap-6">
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="flex flex-col gap-6">
           <Input
             label="별칭"
             placeholder="별칭을 입력해주세요"
@@ -90,14 +84,14 @@ export default function ProfileEditPageView() {
             onChange={(e) => setDescription(e.target.value)}
             maxLength={300}
           />
-        </View>
-      </ScrollView>
+        </div>
+      </div>
 
-      <View className="px-6 pb-6">
-        <Button onClick={handleSubmit} disabled={!isFormValid || isSubmitting}>
+      <div className="px-6 pb-6">
+        <Button onClick={handleSubmit} disabled={!isFormValid || isSubmitting} width="w-full">
           {isSubmitting ? '수정 중...' : '수정'}
         </Button>
-      </View>
-    </SafeAreaView>
+      </div>
+    </div>
   );
 }
