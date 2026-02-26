@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import { TextInput } from 'react-native';
 
 interface UseCustomInputProps {
   onSubmit?: (value: string) => void;
@@ -8,7 +7,7 @@ interface UseCustomInputProps {
 export function useCustomInput({ onSubmit }: UseCustomInputProps = {}) {
   const [isAddingCustomItem, setIsAddingCustomItem] = useState(false);
   const [customItemText, setCustomItemText] = useState('');
-  const customInputRef = useRef<TextInput>(null);
+  const customInputRef = useRef<HTMLInputElement>(null);
 
   const activateCustomInput = useCallback(() => {
     setIsAddingCustomItem(true);
