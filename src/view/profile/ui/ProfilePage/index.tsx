@@ -1,10 +1,8 @@
-import { ScrollView, Text, View, RefreshControl } from 'react-native';
-import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useEffect } from 'react';
 import { Footer } from '~/shared/ui/Footer';
 import { Gwangsan, Information, Light } from '~/entity/profile/ui';
 import { Active, Introduce } from '~/widget/profile/ui';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { useGetPosts } from '../../model/useGetPosts';
 import Post from '~/shared/ui/Post';
 import { useGetProfile } from '../../model/useGetProfile';
@@ -57,54 +55,46 @@ export default function ProfilePageView() {
     }
   };
 
-  if (profileIsError) {
-    Toast.show({
-      type: 'error',
-      text1: '프로필을 불러오는데 실패했습니다.',
-      text2: profileError.message || '잠시 후 다시 시도해주세요.',
-    });
-  }
+  useEffect(() => {
+    if (profileIsError) {
+      toast.error(profileError?.message || '프로필을 불러오는데 실패했습니다.');
+    }
+  }, [profileIsError, profileError]);
 
-  if (isError) {
-    Toast.show({
-      type: 'error',
-      text1: '글을 불러오는데 실패했습니다.',
-      text2: error?.message || '잠시 후 다시 시도해주세요.',
-    });
-  }
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || '글을 불러오는데 실패했습니다.');
+    }
+  }, [isError, error]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Header headerTitle="프로필" />
       <Information
         isMe={isMe}
         id={isMe ? myProfileData?.memberId : profileData?.memberId}
         name={isMe ? myProfileData?.nickname : profileData?.nickname}
       />
-      <ScrollView
-        className="flex-0.8 flex gap-3"
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        <View className="bg-white pb-14">
+      <div className="flex-1 overflow-y-auto">
+        <div className="bg-white pb-14">
           <Introduce
             introduce={isMe ? myProfileData?.description : profileData?.description}
             specialty={isMe ? myProfileData?.specialties : profileData?.specialties}
           />
           <Light lightLevel={isMe ? myProfileData?.light : profileData?.light} />
           {isMe && <Gwangsan gwangsan={myProfileData?.gwangsan} />}
-        </View>
+        </div>
         <Active
           name={isMe ? myProfileData?.nickname : profileData?.nickname}
           id={String(isMe ? myProfileData?.memberId : profileData?.memberId)}
           isMe={isMe}
         />
-        <View className="mt-3 flex gap-6 bg-white px-6 pb-9 pt-10">
-          <Text className=" text-titleSmall">
-            {isMe ? '내 글' : `${profileData?.nickname}님의 글`}
-          </Text>
+        <div className="mt-3 flex flex-col gap-6 bg-white px-6 pb-9 pt-10">
+          <h2 className="text-titleSmall">{isMe ? '내 글' : `${profileData?.nickname}님의 글`}</h2>
           {Array.isArray(postsData) && postsData.map((post) => <Post {...post} key={post.id} />)}
-        </View>
-      </ScrollView>
+        </div>
+      </div>
       <Footer />
-    </SafeAreaView>
+    </div>
   );
 }
