@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import defaultProfile from '~/shared/assets/png/defaultProfile.png';
 import { useSignout, useWithdrawal } from '~/entity/auth';
 import { BottomSheetModalWrapper } from '~/shared/ui';
 
@@ -41,36 +40,39 @@ export default function Information({ name, id, isMe }: InformationProps) {
 
   return (
     <>
-      <View className="mb-3 flex flex-row justify-between bg-white p-6">
-        <View className="flex flex-row gap-4">
-          <Image
-            source={require('~/shared/assets/png/defaultProfile.png')}
-            width={50}
-            height={50}
-            resizeMode="contain"
+      <div className="mb-3 flex flex-row justify-between bg-white p-6">
+        <div className="flex flex-row items-center gap-4">
+          <img
+            src={defaultProfile.uri}
+            alt="프로필"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-full object-cover"
           />
-          <View className="flex-row items-center gap-4">
-            <Text className="text-body1">{name ?? '사용자'}</Text>
+          <div className="flex flex-row items-center gap-2">
+            <span className="text-body1">{name ?? '사용자'}</span>
             {isMe && (
-              <TouchableOpacity
-                onPress={handleLogoutIconPress}
-                className="flex flex-row items-center gap-3"
+              <button
+                onClick={handleLogoutIconPress}
+                className="flex items-center justify-center"
                 disabled={isSignoutLoading || isWithdrawalLoading}>
-                <MaterialIcons name="logout" size={24} color="#DF454A" />
-              </TouchableOpacity>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#DF454A">
+                  <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+              </button>
             )}
-          </View>
-        </View>
+          </div>
+        </div>
         {isMe ? (
-          <TouchableOpacity
-            onPress={handleEditProfile}
-            className="flex justify-center rounded-[30px] border border-main-500 px-4 py-[10px]">
-            <Text className="text-main-500">내 정보 수정</Text>
-          </TouchableOpacity>
+          <button
+            onClick={handleEditProfile}
+            className="flex items-center justify-center rounded-[30px] border border-main-500 px-4 py-[10px]">
+            <span className="text-main-500">내 정보 수정</span>
+          </button>
         ) : (
-          <TouchableOpacity className="flex justify-center rounded-[30px] px-4 py-[10px]"></TouchableOpacity>
+          <button className="flex justify-center rounded-[30px] px-4 py-[10px]"></button>
         )}
-      </View>
+      </div>
 
       <BottomSheetModalWrapper
         isVisible={isBottomSheetVisible}
@@ -78,32 +80,32 @@ export default function Information({ name, id, isMe }: InformationProps) {
         title=""
         hasHeader={false}
         height={270}>
-        <View className="gap-8">
-          <TouchableOpacity
-            onPress={handleLogoutPress}
+        <div className="flex flex-col gap-8">
+          <button
+            onClick={handleLogoutPress}
             disabled={isSignoutLoading || isWithdrawalLoading}
-            className="items-center py-4">
-            <Text className="text-lg text-red-500">
+            className="flex items-center justify-center py-4">
+            <span className="text-lg text-red-500">
               {isSignoutLoading ? '로그아웃 중...' : '로그아웃'}
-            </Text>
-          </TouchableOpacity>
+            </span>
+          </button>
 
-          <TouchableOpacity
-            onPress={handleWithdrawalPress}
+          <button
+            onClick={handleWithdrawalPress}
             disabled={isSignoutLoading || isWithdrawalLoading}
-            className="items-center py-4">
-            <Text className="text-lg text-red-500">
+            className="flex items-center justify-center py-4">
+            <span className="text-lg text-red-500">
               {isWithdrawalLoading ? '회원탈퇴 중...' : '회원탈퇴'}
-            </Text>
-          </TouchableOpacity>
+            </span>
+          </button>
 
-          <TouchableOpacity
-            onPress={handleCloseBottomSheet}
+          <button
+            onClick={handleCloseBottomSheet}
             disabled={isSignoutLoading || isWithdrawalLoading}
-            className="items-center py-4">
-            <Text className="text-lg text-gray-700">취소</Text>
-          </TouchableOpacity>
-        </View>
+            className="flex items-center justify-center py-4">
+            <span className="text-lg text-gray-700">취소</span>
+          </button>
+        </div>
       </BottomSheetModalWrapper>
     </>
   );
