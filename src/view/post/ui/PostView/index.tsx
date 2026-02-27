@@ -1,10 +1,8 @@
 import { useLocalSearchParams } from 'expo-router';
-import { useState, useEffect, useRef } from 'react';
-import { Text, TouchableOpacity, View, Animated, LayoutChangeEvent } from 'react-native';
+import { useState } from 'react';
 import { Header } from '~/shared/ui';
 import { handleCategory } from '../../model/handleCategory';
 import { Category } from '../../model/category';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ModeType } from '~/shared/types/mode';
 import { ProductType } from '~/shared/types/type';
 import PostList from '~/widget/post/ui/PostList';
@@ -25,60 +23,40 @@ export default function PostView() {
 
   const [category, setCategory] = useState<Category>(getInitialCategory());
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const handleLayout = (e: LayoutChangeEvent) => {
-    setContainerWidth(e.nativeEvent.layout.width);
-  };
-
-  const slideAnimation = useRef(new Animated.Value(0)).current;
   const categories = handleCategory(type as ProductType) ?? [];
   const selectedIndex = categories.indexOf(category);
-
   const segments = Math.max(categories.length, 1);
-  const segmentWidth = containerWidth / segments;
-  const translateX = slideAnimation.interpolate({
-    inputRange: [0, Math.max(segments - 1, 1)],
-    outputRange: [0, Math.max(segments - 1, 1) * segmentWidth],
-    extrapolate: 'clamp',
-  });
-
-  useEffect(() => {
-    Animated.timing(slideAnimation, {
-      toValue: selectedIndex,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [selectedIndex, slideAnimation]);
+  const segmentPercent = 100 / segments;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex flex-1 flex-col bg-white">
       <Header headerTitle={type === 'SERVICE' ? '서비스' : '물건'} />
-      <View
-        onLayout={handleLayout}
-        className="bg relative mx-6 mb-6 mt-5 h-[45px] flex-row items-center rounded-[30px] bg-sub2-300 px-2">
-        <Animated.View
-          className="absolute top-[8px] h-8 rounded-[32px] bg-white"
+      <div className="relative mx-6 mb-6 mt-5 flex h-[45px] flex-row items-center rounded-[30px] bg-sub2-300 px-2">
+        <div
+          className="absolute top-[8px] h-8 rounded-[32px] bg-white transition-all duration-300 ease-out"
           style={{
-            width: segmentWidth * 0.94,
-            transform: [{ translateX }],
-            marginLeft: segmentWidth * 0.03,
-            marginRight: segmentWidth * 0.03,
+            width: `calc(${segmentPercent}% - 8px)`,
+            left: `calc(${selectedIndex * segmentPercent}% + 4px)`,
           }}
         />
 
         {categories.map((v, index) => (
-          <TouchableOpacity
+          <button
             key={v}
-            onPress={() => setCategory(v as Category)}
-            className="absolute h-8 w-[47%] items-center justify-center rounded-[32px]"
+            type="button"
+            onClick={() => setCategory(v as Category)}
+            className="absolute z-10 flex h-8 items-center justify-center rounded-[32px]"
             style={{
-              left: index === 0 ? '2%' : '55%',
+              left: `${index * segmentPercent + 1}%`,
+              width: `${segmentPercent - 2}%`,
             }}>
-            <Text className="text-center font-medium">{v}</Text>
-          </TouchableOpacity>
+            <span className="text-center font-medium">{v}</span>
+          </button>
         ))}
-      </View>
-      <PostList type={type} category={category} />
-    </SafeAreaView>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <PostList type={type} category={category} />
+      </div>
+    </div>
   );
 }

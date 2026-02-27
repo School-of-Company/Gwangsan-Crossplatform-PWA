@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import ItemFormContents from '../ItemFormContents';
 import ItemFormGwangsan from '../ItemFormGwangsan';
 import ItemFormConfirm from '../ItemFormConfirm';
@@ -45,7 +44,7 @@ const ItemFormRenderContent = ({
   switch (step) {
     case 1:
       return (
-        <View className="pt-12">
+        <div className="pt-12">
           <ItemFormContents
             title={title}
             content={content}
@@ -56,11 +55,11 @@ const ItemFormRenderContent = ({
             onModeChange={onModeChange}
             onTypeChange={onTypeChange}
           />
-        </View>
+        </div>
       );
     case 2:
       return (
-        <View className="pt-12">
+        <div className="pt-12">
           <ItemFormGwangsan
             images={images}
             onImageUploadStateChange={onImageUploadStateChange}
@@ -69,11 +68,11 @@ const ItemFormRenderContent = ({
             gwangsan={gwangsan}
             onGwangsanChange={onGwangsanChange}
           />
-        </View>
+        </div>
       );
     case 3:
       return (
-        <View className="pt-5">
+        <div className="pt-5">
           <ItemFormConfirm
             mode={mode}
             type={type}
@@ -82,7 +81,7 @@ const ItemFormRenderContent = ({
             gwangsan={gwangsan}
             images={images}
           />
-        </View>
+        </div>
       );
     default:
       return null;

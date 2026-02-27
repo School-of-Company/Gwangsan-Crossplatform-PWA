@@ -1,5 +1,4 @@
 import { useMemo, useCallback, memo, useState } from 'react';
-import { View, Dimensions } from 'react-native';
 import { Dropdown } from '~/shared/ui/Dropdown';
 import { TextField } from '~/shared/ui/TextField';
 import { Button } from '~/shared/ui/Button';
@@ -55,8 +54,6 @@ const ReportModal = ({
     onClose();
   }, [resetForm, onClose]);
 
-  const maxTextFieldHeight = useMemo(() => Dimensions.get('window').height * 0.15, []);
-
   const handleDropdownSelect = useCallback(
     (value: ReportType) => {
       setReportType(value);
@@ -93,8 +90,8 @@ const ReportModal = ({
       onClose={handleClose}
       onAnimationComplete={onAnimationComplete}
       title="신고하기">
-      <View className="flex-1 flex-col justify-between gap-4">
-        <View className="gap-6">
+      <div className="flex flex-1 flex-col justify-between gap-4">
+        <div className="flex flex-col gap-6">
           <Dropdown
             label="신고유형"
             items={REPORT_TYPES}
@@ -108,10 +105,9 @@ const ReportModal = ({
             placeholder="신고사유를 입력해주세요"
             value={contents}
             onChange={(e) => setContents(e.target.value)}
-            style={{ maxHeight: maxTextFieldHeight }}
           />
 
-          <View>
+          <div>
             <ImageUploader
               images={images}
               title="증빙 이미지"
@@ -119,13 +115,13 @@ const ReportModal = ({
               onImageIdsChange={handleImageIdsChange}
               onUploadStateChange={handleUploadStateChange}
             />
-          </View>
-        </View>
+          </div>
+        </div>
 
         <Button variant="error" disabled={isFormDisabled} onClick={handleFormSubmit}>
           {getSubmitButtonText}
         </Button>
-      </View>
+      </div>
     </BottomSheetModalWrapper>
   );
 };

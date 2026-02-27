@@ -1,5 +1,5 @@
-import { Image, Text, View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import defaultProfilePng from '~/shared/assets/png/defaultProfile.png';
 
 interface MiniProfileProps {
   nickname: string;
@@ -15,21 +15,28 @@ export default function MiniProfile({ nickname, placeName, light, memberId }: Mi
     router.push(`/profile?id=${memberId}`);
   };
 
+  const profileSrc =
+    typeof defaultProfilePng === 'string'
+      ? defaultProfilePng
+      : (defaultProfilePng as any).src || (defaultProfilePng as any).uri || '';
+
   return (
-    <TouchableOpacity
-      onPress={handleProfilePress}
-      className=" flex-row items-center justify-between border-b border-b-gray-100 px-6 py-3">
-      <View className="flex-row gap-3">
-        <Image
-          className="h-[50px] w-[50px]"
-          source={require('~/shared/assets/png/defaultProfile.png')}
+    <button
+      type="button"
+      onClick={handleProfilePress}
+      className="flex w-full flex-row items-center justify-between border-b border-b-gray-100 px-6 py-3 text-left">
+      <div className="flex flex-row gap-3">
+        <img
+          src={profileSrc}
+          alt="프로필"
+          className="h-[50px] w-[50px] rounded-full object-cover"
         />
-        <View className="gap-[5px]">
-          <Text className="text-body3">{nickname}</Text>
-          <Text>{placeName}</Text>
-        </View>
-      </View>
-      <Text className={`text-body1`}>{light + '단계'}</Text>
-    </TouchableOpacity>
+        <div className="flex flex-col gap-[5px]">
+          <span className="text-body3">{nickname}</span>
+          <span>{placeName}</span>
+        </div>
+      </div>
+      <span className="text-body1">{light + '단계'}</span>
+    </button>
   );
 }

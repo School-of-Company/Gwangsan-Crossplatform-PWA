@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'expo-router';
-import { Alert } from 'react-native';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { createReview } from '~/entity/post/api/createReview';
 import { useGetItem } from '~/entity/post/model/useGetItem';
 import { useDeletePost } from '~/entity/post';
@@ -58,17 +57,10 @@ export const usePostAction = ({ id, review }: UsePostPageLogicParams) => {
             content: contents,
             light: light,
           });
-          Toast.show({
-            type: 'success',
-            text1: '리뷰가 성공적으로 작성되었습니다.',
-          });
+          toast.success('리뷰가 성공적으로 작성되었습니다.');
           setIsReviewModalVisible(false);
         } catch (error) {
-          Toast.show({
-            type: 'error',
-            text1: '리뷰 작성 실패',
-            text2: error as string,
-          });
+          toast.error('리뷰 작성 실패');
         }
       },
       [id, data]
@@ -92,14 +84,9 @@ export const usePostAction = ({ id, review }: UsePostPageLogicParams) => {
     onDelete: useCallback(() => {
       if (!data) return;
 
-      Alert.alert('게시글 삭제', '이 게시글을 삭제하시겠습니까?', [
-        { text: '취소', style: 'cancel' },
-        {
-          text: '삭제',
-          style: 'destructive',
-          onPress: () => deletePost(data.id, data.type, data.mode),
-        },
-      ]);
+      if (window.confirm('이 게시글을 삭제하시겠습니까?')) {
+        deletePost(data.id, data.type, data.mode);
+      }
     }, [data, deletePost]),
     onTradeRequest: tradeRequest.handleTradeRequest,
     onRefresh: useCallback(async () => {

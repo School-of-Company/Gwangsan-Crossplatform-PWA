@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'expo-router';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { requestTrade } from '../api/requestTrade';
 import { useChatEntry } from '~/shared/lib/useChatEntry';
 
@@ -33,11 +33,7 @@ export const useTradeRequest = ({
         otherMemberId: sellerId,
       });
 
-      Toast.show({
-        type: 'success',
-        text1: '거래 신청이 전송되었습니다',
-        text2: '채팅방에서 대화를 시작해보세요!',
-      });
+      toast.success('거래 신청이 전송되었습니다. 채팅방에서 대화를 시작해보세요!');
 
       try {
         if (response.roomId) {
@@ -47,21 +43,14 @@ export const useTradeRequest = ({
         }
       } catch (navigationError) {
         console.error(navigationError);
-        Toast.show({
-          type: 'info',
-          text1: '채팅방 이동 중 오류가 발생했습니다',
-          text2:
-            navigationError instanceof Error
-              ? navigationError.message
-              : '채팅하기 버튼을 눌러 이동해주세요.',
-        });
+        toast.info(
+          navigationError instanceof Error
+            ? navigationError.message
+            : '채팅하기 버튼을 눌러 이동해주세요.'
+        );
       }
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: '거래 신청 실패',
-        text2: error instanceof Error ? error.message : '다시 시도해주세요.',
-      });
+      toast.error(error instanceof Error ? error.message : '다시 시도해주세요.');
       throw error;
     } finally {
       setIsLoading(false);

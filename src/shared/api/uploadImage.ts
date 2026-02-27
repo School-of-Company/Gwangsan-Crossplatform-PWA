@@ -1,36 +1,25 @@
 import { instance } from '../lib/axios';
-import { Platform } from 'react-native';
-import * as FileSystem from 'expo-file-system';
 import { ImageType } from '../types/imageType';
 
-export const uploadImage = async (uri: string): Promise<ImageType> => {
+export const uploadImage = async (input: File | string): Promise<ImageType> => {
   try {
-    const filename = uri.split('/').pop() || 'image.jpg';
+    const formData = new FormData();
 
-    let fileType = filename.split('.').pop()?.toLowerCase();
-    if (Platform.OS === 'android' && !fileType) {
-      const fileInfo = await FileSystem.getInfoAsync(uri);
-      if (fileInfo.exists) {
-        fileType = uri.match(/\.(jpeg|jpg|png|gif|webp)$/i)?.[1] || 'jpeg';
-      }
+    if (input instanceof File) {
+      formData.append('file', input, input.name);
+    } else {
+      const filename = input.split('/').pop() || 'image.jpg';
+      const fileType = filename.split('.').pop()?.toLowerCase() || 'jpeg';
+      formData.append('file', {
+        uri: input,
+        name: filename,
+        type: `image/${fileType}`,
+      } as unknown as Blob);
     }
 
-    const type = `image/${fileType || 'jpeg'}`;
-
-    const formData = new FormData();
-    formData.append('file', {
-      uri,
-      name: filename,
-      type,
-    } as any);
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    const response = await instance.post<ImageType>('/image', formData, config);
+    const response = await instance.post<ImageType>('/image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
 
     return response.data;
   } catch (error) {

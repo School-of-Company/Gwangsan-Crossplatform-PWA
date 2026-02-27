@@ -1,15 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-  Pressable,
-  Animated,
-  Easing,
-  Keyboard,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { useEffect, useState } from 'react';
 
 interface BottomSheetModalWrapperProps {
   isVisible: boolean;
@@ -30,114 +19,61 @@ export function BottomSheetModalWrapper({
   height,
   hasHeader = true,
 }: BottomSheetModalWrapperProps) {
-  const screenHeight = Dimensions.get('window').height;
-  const modalHeight = height ?? (screenHeight * 2) / 3;
-
   const [show, setShow] = useState(isVisible);
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(modalHeight)).current;
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
-      Animated.timing(translateY, {
-        toValue: -e.endCoordinates.height,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.out(Easing.cubic),
-      }).start();
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.out(Easing.cubic),
-      }).start();
-    });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, [translateY]);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
-      translateY.setValue(modalHeight);
-      overlayOpacity.setValue(0);
       setShow(true);
-      Animated.timing(overlayOpacity, {
-        toValue: 1,
-        duration: 120,
-        useNativeDriver: true,
-        easing: Easing.linear,
-      }).start();
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: 250,
-        delay: 80,
-        useNativeDriver: true,
-        easing: Easing.out(Easing.cubic),
-      }).start();
+      setAnimating(false);
     } else if (show) {
-      Animated.timing(translateY, {
-        toValue: modalHeight,
-        duration: 220,
-        useNativeDriver: true,
-        easing: Easing.in(Easing.cubic),
-      }).start(() => {
-        Animated.timing(overlayOpacity, {
-          toValue: 0,
-          duration: 120,
-          useNativeDriver: true,
-          easing: Easing.linear,
-        }).start(() => {
-          setShow(false);
-          onAnimationComplete?.();
-        });
-      });
+      setAnimating(true);
+      const timer = setTimeout(() => {
+        setShow(false);
+        setAnimating(false);
+        onAnimationComplete?.();
+      }, 250);
+      return () => clearTimeout(timer);
     }
-  }, [isVisible, modalHeight, overlayOpacity, translateY, show, onAnimationComplete]);
+  }, [isVisible, show, onAnimationComplete]);
 
   if (!show) return null;
 
+  const modalStyle = height ? { height } : { height: '66vh' };
+
   return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        opacity: overlayOpacity,
-        zIndex: 1000,
-      }}
-      className="absolute inset-0 z-[1000] bg-black/50">
-      <Pressable className="flex-1 justify-end" onPress={onClose}>
-        <Animated.View
-          style={{
-            height: modalHeight,
-            transform: [{ translateY }],
-          }}
-          className="rounded-t-2xl bg-white">
-          <Pressable className="flex-1 p-4" onPress={(e) => e.stopPropagation()}>
-            {hasHeader && (
-              <View className="relative mb-4 flex-row items-center justify-center py-6">
-                <Text className="text-body1 text-black">{title}</Text>
-                <TouchableOpacity
-                  onPress={onClose}
-                  className="absolute right-0"
-                  style={{ right: 0 }}>
-                  <Icon name="close" size={24} color="#666" />
-                </TouchableOpacity>
-              </View>
-            )}
-            <View className="flex-1">{children}</View>
-          </Pressable>
-        </Animated.View>
-      </Pressable>
-    </Animated.View>
+    <div
+      className={`fixed inset-0 z-[1000] flex flex-col justify-end transition-opacity duration-150 ${
+        isVisible && !animating ? 'opacity-100' : 'opacity-0'
+      }`}
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+      onClick={onClose}>
+      <div
+        className={`duration-250 rounded-t-2xl bg-white transition-transform ease-out ${
+          isVisible && !animating ? 'translate-y-0' : 'translate-y-full'
+        }`}
+        style={modalStyle}
+        onClick={(e) => e.stopPropagation()}>
+        <div className="flex h-full flex-col p-4">
+          {hasHeader && (
+            <div className="relative mb-4 flex flex-row items-center justify-center py-6">
+              <span className="text-body1 text-black">{title}</span>
+              <button onClick={onClose} className="absolute right-0 p-1">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M18 6L6 18M6 6L18 18"
+                    stroke="#666"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
+          <div className="flex-1 overflow-y-auto">{children}</div>
+        </div>
+      </div>
+    </div>
   );
 }

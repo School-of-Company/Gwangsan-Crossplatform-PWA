@@ -1,41 +1,20 @@
-import { View, Animated } from 'react-native';
-import { useEffect, useRef } from 'react';
-
 interface ItemFormProgressBarProps {
   step: number;
 }
 
 const ItemFormProgressBar = ({ step }: ItemFormProgressBarProps) => {
-  const animatedValue = useRef(new Animated.Value(step)).current;
-
-  useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: step,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [step, animatedValue]);
+  const totalSteps = 3;
+  const progressPercent = (step / totalSteps) * 100;
 
   return (
-    <View>
-      <View className="h-2 w-full flex-row">
-        <Animated.View
-          className="bg-blue-300"
-          style={{
-            flex: animatedValue,
-          }}
+    <div>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+        <div
+          className="h-full bg-blue-300 transition-all duration-300 ease-out"
+          style={{ width: `${progressPercent}%` }}
         />
-        <Animated.View
-          className="bg-gray-100"
-          style={{
-            flex: animatedValue.interpolate({
-              inputRange: [1, 2, 3],
-              outputRange: [2, 1, 0],
-            }),
-          }}
-        />
-      </View>
-    </View>
+      </div>
+    </div>
   );
 };
 

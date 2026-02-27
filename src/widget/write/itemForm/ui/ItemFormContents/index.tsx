@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { memo } from 'react';
 import { Dropdown, Input } from '~/shared/ui';
 import { TextField } from '~/shared/ui/TextField';
@@ -29,9 +28,9 @@ const ItemFormContents = ({
   type,
 }: Props) => {
   return (
-    <View className="px-6">
-      <View className="gap-4">
-        <View className="gap-8">
+    <div className="px-6">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           <Dropdown
             onSelect={onTypeChange}
             selectedItem={type}
@@ -71,9 +70,9 @@ const ItemFormContents = ({
             onChange={(e) => onContentChange?.(e.target.value)}
             disabled={readonly}
           />
-        </View>
-      </View>
-    </View>
+        </div>
+      </div>
+    </div>
   );
 };
 

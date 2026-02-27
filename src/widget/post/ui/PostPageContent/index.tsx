@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, TouchableOpacity, RefreshControl } from 'react-native';
 import MiniProfile from '~/entity/post/ui/miniProfile';
 import { Button } from '~/shared/ui';
 import type { PostDetailResponse } from '~/entity/post/api/getItem';
+import logoPng from '~/shared/assets/png/logo.png';
 
 interface PostPageContentProps {
   readonly data: PostDetailResponse;
@@ -40,18 +40,25 @@ export const PostPageContent: React.FC<PostPageContentProps> = ({
   onChatPress,
   onTradeRequest,
   onReviewButtonPress,
-  onRefresh,
 }) => {
+  const logoSrc =
+    typeof logoPng === 'string' ? logoPng : (logoPng as any).src || (logoPng as any).uri || '';
+
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+    <div className="flex-1 overflow-y-auto">
+      {refreshing && (
+        <div className="flex justify-center py-3">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#8FC31D] border-t-transparent" />
+        </div>
+      )}
       {data.images && data.images.length > 0 ? (
-        <Image
-          source={{ uri: data.images[0].imageUrl }}
-          className="h-[280px] w-full"
-          resizeMode="cover"
+        <img
+          src={data.images[0].imageUrl}
+          alt="게시글 이미지"
+          className="h-[280px] w-full object-cover"
         />
       ) : (
-        <Image source={require('~/shared/assets/png/logo.png')} className="h-[280px] w-full" />
+        <img src={logoSrc} alt="기본 이미지" className="h-[280px] w-full object-cover" />
       )}
 
       <MiniProfile
@@ -61,22 +68,25 @@ export const PostPageContent: React.FC<PostPageContentProps> = ({
         memberId={data.member.memberId}
       />
 
-      <View className="gap-6 p-6">
-        <Text className="text-titleSmall">{data.title}</Text>
-        <Text className="text-body3">{data.gwangsan} 광산</Text>
-        <Text>{data.content}</Text>
+      <div className="flex flex-col gap-6 p-6">
+        <p className="text-titleSmall">{data.title}</p>
+        <p className="text-body3">{data.gwangsan} 광산</p>
+        <p>{data.content}</p>
 
-        <TouchableOpacity onPress={isMyPost ? onDeletePress : onReportPress} disabled={isDeleting}>
-          <Text className="mb-24 mt-[25px] text-error-500 underline">
+        <button
+          type="button"
+          onClick={isMyPost ? onDeletePress : onReportPress}
+          disabled={isDeleting}>
+          <span className="mb-24 mt-[25px] text-error-500 underline">
             {isMyPost
               ? isDeleting
                 ? '삭제 처리 중...'
                 : '이 게시글 삭제하기'
               : '이 게시글 신고하기'}
-          </Text>
-        </TouchableOpacity>
+          </span>
+        </button>
 
-        <View className="w-full flex-row justify-center gap-4">
+        <div className="flex w-full flex-row justify-center gap-4">
           {review === '1' ? (
             <Button variant="primary" width="w-full" onClick={onReviewButtonPress}>
               리뷰 작성
@@ -107,8 +117,8 @@ export const PostPageContent: React.FC<PostPageContentProps> = ({
               )}
             </>
           )}
-        </View>
-      </View>
-    </ScrollView>
+        </div>
+      </div>
+    </div>
   );
 };

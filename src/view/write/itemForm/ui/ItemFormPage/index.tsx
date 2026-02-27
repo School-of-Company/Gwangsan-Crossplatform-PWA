@@ -1,12 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
 import { Header } from '@/shared/ui';
 import {
   ItemFormProgressBar,
@@ -14,10 +6,9 @@ import {
   useCreateItem,
 } from '~/entity/write/itemForm';
 import { ItemFormRenderContent, ItemFormRenderButton } from '~/widget/write/itemForm';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import type { ImageUploadState } from '@/shared/ui/ImageUploader';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { ProductType } from '~/widget/write/model/type';
 import { ModeType } from '~/widget/write/model/mode';
 import { useEditPost } from '~/entity/post/model/useEditPost';
@@ -92,20 +83,12 @@ const ItemFormPage = () => {
       if (isSubmitting) return;
 
       if (imageUploadState?.hasUploadingImages) {
-        Toast.show({
-          type: 'error',
-          text1: '이미지 업로드가 완료될 때까지 기다려주세요.',
-          visibilityTime: 3000,
-        });
+        toast.error('이미지 업로드가 완료될 때까지 기다려주세요.');
         return;
       }
 
       if (imageUploadState?.hasFailedImages) {
-        Toast.show({
-          type: 'error',
-          text1: '이미지 업로드 실패',
-          visibilityTime: 3000,
-        });
+        toast.error('이미지 업로드 실패');
         return;
       }
 
@@ -144,66 +127,58 @@ const ItemFormPage = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#8FC31D" />
-      </SafeAreaView>
+      <div className="flex flex-1 items-center justify-center bg-white">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#8FC31D] border-t-transparent" />
+      </div>
     );
   }
 
   if (id && (error || !postData)) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <Text className="text-error-500">게시글을 불러오는데 실패했습니다.</Text>
-      </SafeAreaView>
+      <div className="flex flex-1 items-center justify-center bg-white">
+        <span className="text-error-500">게시글을 불러오는데 실패했습니다.</span>
+      </div>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 bg-white">
-        <Header headerTitle="게시글" />
-        <ItemFormProgressBar step={step} />
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled">
-          <View className="flex-1 flex-col justify-between">
-            <ItemFormRenderContent
+    <div className="flex flex-1 flex-col bg-white">
+      <Header headerTitle="게시글" />
+      <ItemFormProgressBar step={step} />
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex min-h-full flex-col justify-between">
+          <ItemFormRenderContent
+            step={step}
+            title={title}
+            content={content}
+            gwangsan={gwangsan}
+            images={images}
+            mode={mode as ModeType}
+            type={type as ProductType}
+            onTitleChange={handleTitleChange}
+            onContentChange={handleContentChange}
+            onModeChange={handleModeChange}
+            onTypeChange={handleTypeChange}
+            onImagesChange={handleImagesChange}
+            onGwangsanChange={handleGwangsanChange}
+            onImageIdsChange={handleImageIdsChange}
+            onImageUploadStateChange={handleImageUploadStateChange}
+          />
+          <div>
+            <ItemFormRenderButton
               step={step}
-              title={title}
-              content={content}
-              gwangsan={gwangsan}
-              images={images}
-              mode={mode as ModeType}
-              type={type as ProductType}
-              onTitleChange={handleTitleChange}
-              onContentChange={handleContentChange}
-              onModeChange={handleModeChange}
-              onTypeChange={handleTypeChange}
-              onImagesChange={handleImagesChange}
-              onGwangsanChange={handleGwangsanChange}
-              onImageIdsChange={handleImageIdsChange}
-              onImageUploadStateChange={handleImageUploadStateChange}
+              isStep1Valid={isStep1Valid}
+              isStep2Valid={isStep2Valid}
+              onNextStep={setStep}
+              onEditPress={() => setStep(1)}
+              onCompletePress={handleCompletePress}
+              isSubmitting={isSubmitting}
+              imageUploadState={imageUploadState}
             />
-            <View>
-              <ItemFormRenderButton
-                step={step}
-                isStep1Valid={isStep1Valid}
-                isStep2Valid={isStep2Valid}
-                onNextStep={setStep}
-                onEditPress={() => setStep(1)}
-                onCompletePress={handleCompletePress}
-                isSubmitting={isSubmitting}
-                imageUploadState={imageUploadState}
-              />
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
