@@ -10,7 +10,11 @@ export const uploadImage = async (input: File | string): Promise<ImageType> => {
     } else {
       const filename = input.split('/').pop() || 'image.jpg';
       const fileType = filename.split('.').pop()?.toLowerCase() || 'jpeg';
-      formData.append('file', { uri: input, name: filename, type: `image/${fileType}` } as unknown as Blob);
+      formData.append('file', {
+        uri: input,
+        name: filename,
+        type: `image/${fileType}`,
+      } as unknown as Blob);
     }
 
     const response = await instance.post<ImageType>('/image', formData, {
