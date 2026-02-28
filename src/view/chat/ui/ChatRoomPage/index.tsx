@@ -1,6 +1,4 @@
 import { useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useChatMessages } from '~/widget/chat/model/useChatMessages';
 import { useChatAction } from '~/widget/chat/model/useChatActions';
@@ -27,7 +25,7 @@ export default function ChatRoomPage() {
   const [reviewContents, setReviewContents] = useState('');
 
   const {
-    flatListRef,
+    scrollRef,
     messages,
     otherUserInfo,
     isLoading,
@@ -82,7 +80,7 @@ export default function ChatRoomPage() {
 
   useEffect(() => {
     if (messages.length > 0) {
-      setTimeout(() => scrollToEnd(true), 100);
+      setTimeout(() => scrollToEnd(), 100);
     }
   }, [messages.length, scrollToEnd]);
 
@@ -140,39 +138,36 @@ export default function ChatRoomPage() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#8FC31D" />
-      </SafeAreaView>
+      <div className="flex h-full flex-col items-center justify-center bg-white">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#8FC31D] border-t-transparent" />
+      </div>
     );
   }
 
   if (isError) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <Text className="text-error-500">Failed to load chat room</Text>
-      </SafeAreaView>
+      <div className="flex h-full flex-col items-center justify-center bg-white">
+        <p className="text-red-500">Failed to load chat room</p>
+      </div>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <div className="flex h-full flex-col bg-white">
       <Header
         headerTitle={updatedComponentState.headerTitle}
         onMenuPress={handleMenuPress}
         showMenuButton={menuConfig.shouldShowMenuButton}
       />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1"
-        keyboardVerticalOffset={0}>
+      <div className="flex flex-1 flex-col overflow-hidden">
         <ChatRoomContent
           messages={messages}
           hasMessages={updatedComponentState.hasMessages}
-          flatListRef={flatListRef}
+          scrollRef={scrollRef}
           renderHeader={renderHeader}
           onProfilePress={navigationHandlers.goToProfile}
-          onScrollToEnd={() => scrollToEnd(true)}
+          onScrollToEnd={scrollToEnd}
           tradeEmbedConfig={tradeEmbedConfig}
           onReviewButtonPress={handleReviewButtonPress}
           showReviewButton={roomData?.product?.isCompleted}
@@ -182,7 +177,7 @@ export default function ChatRoomPage() {
           onSendMessage={messageHandlers.sendMessage}
           disabled={!updatedComponentState.canSendMessage}
         />
-      </KeyboardAvoidingView>
+      </div>
 
       <TradeRequestModal
         isVisible={isTradeRequestModalVisible}
@@ -204,6 +199,6 @@ export default function ChatRoomPage() {
           setReviewContents('');
         }}
       />
-    </SafeAreaView>
+    </div>
   );
 }

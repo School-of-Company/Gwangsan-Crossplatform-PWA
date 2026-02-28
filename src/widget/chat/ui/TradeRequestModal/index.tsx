@@ -1,5 +1,4 @@
 import React, { memo, useCallback } from 'react';
-import { View, Text } from 'react-native';
 import { BottomSheetModalWrapper, Button } from '~/shared/ui';
 
 interface TradeRequestModalProps {
@@ -29,14 +28,14 @@ const TradeRequestModalComponent: React.FC<TradeRequestModalProps> = ({
       onAnimationComplete={onAnimationComplete}
       title="거래 요청"
       height={200}>
-      <View className="flex-1 flex-col justify-between gap-4">
-        <View className="gap-4">
-          <Text className="text-center text-gray-600">이 상품에 대한 거래를 요청하시겠습니까?</Text>
-        </View>
+      <div className="flex flex-1 flex-col justify-between gap-4">
+        <div className="gap-4">
+          <span className="text-center text-gray-600">이 상품에 대한 거래를 요청하시겠습니까?</span>
+        </div>
 
-        <View className="flex-row gap-3">
+        <div className="flex flex-row gap-3">
           <Button variant="secondary" onClick={onClose} width="flex-1" disabled={isLoading}>
-            <Text className="text-gray-700">취소</Text>
+            <span className="text-gray-700">취소</span>
           </Button>
 
           <Button
@@ -44,10 +43,10 @@ const TradeRequestModalComponent: React.FC<TradeRequestModalProps> = ({
             onClick={handleTradeRequest}
             disabled={isLoading}
             width="flex-1">
-            <Text className="text-white">{isLoading ? '요청 중...' : '거래 요청하기'}</Text>
+            <span className="text-white">{isLoading ? '요청 중...' : '거래 요청하기'}</span>
           </Button>
-        </View>
-      </View>
+        </div>
+      </div>
     </BottomSheetModalWrapper>
   );
 };

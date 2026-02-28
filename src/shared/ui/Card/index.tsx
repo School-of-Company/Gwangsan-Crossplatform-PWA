@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
 
-export interface CardProps extends ViewProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'primary';
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-export const Card = React.forwardRef<View, CardProps>(
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', variant = 'default', padding = 'md', ...props }, ref) => {
     let cardClasses = 'rounded-xl border bg-white';
 
@@ -37,7 +36,7 @@ export const Card = React.forwardRef<View, CardProps>(
       cardClasses += ` ${className}`;
     }
 
-    return <View ref={ref} className={cardClasses} {...props} />;
+    return <div ref={ref} className={cardClasses} {...props} />;
   }
 );
 

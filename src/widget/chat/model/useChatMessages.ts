@@ -1,5 +1,4 @@
 import { useCallback, useRef } from 'react';
-import { FlatList } from 'react-native';
 import { useChatMessages as useChatMessagesEntity } from '~/entity/chat';
 import { useChatSocket } from '~/entity/chat/model/useChatSocket';
 import { extractOtherUserInfo, ensureMessagesArray } from '~/shared/lib/userUtils';
@@ -11,7 +10,7 @@ interface UseChatMessagesParams {
 }
 
 interface UseChatMessagesReturn {
-  readonly flatListRef: React.RefObject<FlatList | null>;
+  readonly scrollRef: React.RefObject<HTMLDivElement | null>;
   readonly messages: ChatMessageResponse[];
   readonly otherUserInfo: { nickname: string; id?: number };
   readonly isLoading: boolean;
@@ -19,14 +18,13 @@ interface UseChatMessagesReturn {
   readonly connectionState: string;
   readonly messageHandlers: {
     readonly sendMessage: (content: string | null, imageIds: number[]) => void;
-    readonly renderMessage: ({ item }: { item: ChatMessageResponse }) => null;
   };
   readonly scrollToEnd: (animated?: boolean) => void;
   readonly markRoomAsRead: (roomId: RoomId) => Promise<void>;
 }
 
 export const useChatMessages = ({ roomId }: UseChatMessagesParams): UseChatMessagesReturn => {
-  const flatListRef = useRef<FlatList | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const { data: messages, isLoading, isError } = useChatMessagesEntity(roomId);
   const { sendMessage, markRoomAsRead, connectionState } = useChatSocket({
@@ -38,8 +36,10 @@ export const useChatMessages = ({ roomId }: UseChatMessagesParams): UseChatMessa
   const safeMessages = ensureMessagesArray(messages);
   const otherUserInfo = extractOtherUserInfo(safeMessages);
 
-  const scrollToEnd = useCallback((animated = true) => {
-    flatListRef.current?.scrollToEnd({ animated });
+  const scrollToEnd = useCallback(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, []);
 
   const messageHandlers = {
@@ -55,14 +55,10 @@ export const useChatMessages = ({ roomId }: UseChatMessagesParams): UseChatMessa
       },
       [roomId, sendMessage, connectionState]
     ),
-
-    renderMessage: useCallback(({ item }: { item: ChatMessageResponse }) => {
-      return null;
-    }, []),
   };
 
   return {
-    flatListRef,
+    scrollRef,
     messages: safeMessages,
     otherUserInfo,
     isLoading,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
 
 interface ChatRoomHeaderProps {
   readonly otherUserNickname: string;
@@ -15,15 +14,15 @@ export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
   onProfilePress,
 }) => {
   return (
-    <View className="bg-white">
-      <View className="items-center py-8">
-        <View className="flex-row items-center justify-center">
-          <TouchableOpacity onPress={onProfilePress} disabled={!otherUserId}>
-            <Text className="mb-2 text-xl font-bold text-gray-900">{otherUserNickname}</Text>
-          </TouchableOpacity>
-        </View>
-        <Text className="text-sm text-gray-500">{lastMessageDate}</Text>
-      </View>
-    </View>
+    <div className="bg-white">
+      <div className="flex flex-col items-center py-8">
+        <div className="flex flex-row items-center justify-center">
+          <button onClick={onProfilePress} disabled={!otherUserId}>
+            <span className="mb-2 block text-xl font-bold text-gray-900">{otherUserNickname}</span>
+          </button>
+        </div>
+        <span className="text-sm text-gray-500">{lastMessageDate}</span>
+      </div>
+    </div>
   );
 };

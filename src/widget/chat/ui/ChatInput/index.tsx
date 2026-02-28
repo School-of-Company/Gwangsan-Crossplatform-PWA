@@ -1,6 +1,4 @@
-import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { memo } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useChatInput } from '../../model/useChatInput';
 import { ImagePreview } from '../ImagePreview';
 
@@ -23,55 +21,69 @@ const ChatInputComponent = ({ onSendMessage, disabled }: ChatInputProps) => {
     chatInput.selectedImages.length < 5;
 
   return (
-    <View className="bg-white">
+    <div className="bg-white">
       <ImagePreview images={chatInput.selectedImages} onRemoveImage={chatInput.removeImage} />
 
-      <View className="flex-row items-center border-t border-gray-200 px-4 py-4">
-        <View className="mr-3 min-h-[48px] flex-1 flex-row items-center rounded-full bg-gray-100">
-          <TextInput
+      {/* 숨겨진 파일 input */}
+      <input
+        ref={chatInput.fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={chatInput.handleFileChange}
+      />
+
+      <div className="flex flex-row items-center border-t border-gray-200 px-4 py-4">
+        <div className="mr-3 flex min-h-[48px] flex-1 flex-row items-center rounded-full bg-gray-100">
+          <input
             value={chatInput.textMessage}
-            onChangeText={chatInput.updateMessage}
+            onChange={(e) => chatInput.updateMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatInput.handleSendMessage();
+              }
+            }}
             placeholder="채팅을 입력해주세요"
-            placeholderTextColor="#9CA3AF"
-            className="min-h-[48px] flex-1 px-4 py-3 text-base text-gray-900"
-            multiline={false}
-            onSubmitEditing={chatInput.handleSendMessage}
-            editable={!isInputDisabled}
-            returnKeyType="send"
-            blurOnSubmit={false}
-            style={{ textAlignVertical: 'center' }}
+            className="min-h-[48px] flex-1 bg-transparent px-4 py-3 text-base text-gray-900 outline-none placeholder:text-gray-400"
+            disabled={isInputDisabled}
           />
-          <TouchableOpacity
+          <button
             className="mr-3 p-2"
-            onPress={chatInput.handleImagePicker}
-            disabled={!canSelectImage}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            onClick={chatInput.handleImagePicker}
+            disabled={!canSelectImage}>
             {chatInput.isUploading ? (
-              <ActivityIndicator size="small" color="#8F9094" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#8F9094] border-t-transparent" />
             ) : (
-              <Icon
-                name="camera-outline"
-                size={24}
-                color={canSelectImage ? '#8F9094' : '#D1D5DB'}
-              />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z"
+                  stroke={canSelectImage ? '#8F9094' : '#D1D5DB'}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="13" r="4" stroke={canSelectImage ? '#8F9094' : '#D1D5DB'} strokeWidth="2" />
+              </svg>
             )}
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={chatInput.handleSendMessage}
+          </button>
+        </div>
+        <button
+          onClick={chatInput.handleSendMessage}
           disabled={!chatInput.canSend}
-          className={`h-12 w-12 items-center justify-center rounded-full ${
+          className={`h-12 w-12 flex items-center justify-center rounded-full ${
             chatInput.canSend ? 'bg-orange-400' : 'bg-gray-300'
-          }`}
-          hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}>
+          }`}>
           {chatInput.isSending ? (
-            <ActivityIndicator size="small" color="white" />
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
-            <Icon name="chevron-forward" size={20} color="white" />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           )}
-        </TouchableOpacity>
-      </View>
-    </View>
+        </button>
+      </div>
+    </div>
   );
 };
 

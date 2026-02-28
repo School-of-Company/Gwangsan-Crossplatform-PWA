@@ -1,5 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import { memo } from 'react';
+import { memo, type FC } from 'react';
 import {
   useImageLoader,
   formatMessageTime,
@@ -7,14 +6,13 @@ import {
   type MessageRenderConfig,
   type ChatMessageResponse,
 } from '@/entity/chat';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 interface OtherMessageProps {
   message: ChatMessageResponse;
   onProfilePress?: (userId: number) => void;
 }
 
-const OtherMessageComponent: React.FC<OtherMessageProps> = ({ message, onProfilePress }) => {
+const OtherMessageComponent: FC<OtherMessageProps> = ({ message, onProfilePress }) => {
   const imageLoader = useImageLoader();
 
   const messageConfig: MessageRenderConfig = {
@@ -38,28 +36,30 @@ const OtherMessageComponent: React.FC<OtherMessageProps> = ({ message, onProfile
   };
 
   return (
-    <View className="mb-4 items-start">
-      <View className="flex-row items-start">
-        <TouchableOpacity
-          className="mr-2 h-8 w-8 items-center justify-center rounded-full bg-gray-300"
-          onPress={handleProfilePress}
-          disabled={!onProfilePress}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Icon name="person" size={16} color="#9CA3AF" />
-        </TouchableOpacity>
-        <View className="flex-1">
-          <TouchableOpacity onPress={handleProfilePress} disabled={!onProfilePress}>
-            <Text className="mb-1 text-xs text-gray-600">{message.senderNickname}</Text>
-          </TouchableOpacity>
-          <View className="flex-row items-end">
-            <View className="max-w-[280px] rounded-xl bg-gray-100 px-4 py-3">{content}</View>
-            <Text className="ml-2 text-xs text-gray-500">
+    <div className="mb-4 flex flex-col items-start">
+      <div className="flex flex-row items-start">
+        <button
+          className="mr-2 h-8 w-8 flex items-center justify-center rounded-full bg-gray-300"
+          onClick={handleProfilePress}
+          disabled={!onProfilePress}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M20 21C20 19.6044 20 18.9067 19.8278 18.3389C19.44 17.0605 18.4395 16.06 17.1611 15.6722C16.5933 15.5 15.8956 15.5 14.5 15.5H9.5C8.10444 15.5 7.40665 15.5 6.83886 15.6722C5.56045 16.06 4.56004 17.0605 4.17224 18.3389C4 18.9067 4 19.6044 4 21" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="12" cy="8" r="4" stroke="#9CA3AF" strokeWidth="2" />
+          </svg>
+        </button>
+        <div className="flex-1">
+          <button onClick={handleProfilePress} disabled={!onProfilePress} className="text-left">
+            <span className="mb-1 block text-xs text-gray-600">{message.senderNickname}</span>
+          </button>
+          <div className="flex flex-row items-end">
+            <div className="max-w-[280px] rounded-xl bg-gray-100 px-4 py-3">{content}</div>
+            <span className="ml-2 text-xs text-gray-500">
               {formatMessageTime(message.createdAt)}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </View>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

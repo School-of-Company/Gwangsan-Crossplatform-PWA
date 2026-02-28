@@ -1,4 +1,3 @@
-import { View, Text, Image } from 'react-native';
 import { memo } from 'react';
 import { formatDate } from '@/shared/lib/formatDate';
 import type { ChatMessageResponse } from '../../model/chatTypes';
@@ -13,55 +12,55 @@ const ChatMessageComponent = ({ message }: ChatMessageProps) => {
   const renderContent = () => {
     if (message.messageType === 'IMAGE' && message.images && message.images.length > 0) {
       return (
-        <View className={`max-w-[250px] ${isMyMessage ? 'items-end' : 'items-start'}`}>
-          {message.images.map((image, index) => (
-            <Image
+        <div className={`max-w-[250px] ${isMyMessage ? 'items-end' : 'items-start'} flex flex-col`}>
+          {message.images.map((image) => (
+            <img
               key={image.imageId}
-              source={{ uri: image.imageUrl }}
-              className="mb-1 h-48 w-48 rounded-lg"
-              resizeMode="cover"
+              src={image.imageUrl}
+              alt="chat image"
+              className="mb-1 h-48 w-48 rounded-lg object-cover"
             />
           ))}
           {message.content && (
-            <Text className={`text-sm ${isMyMessage ? 'text-white' : 'text-gray-800'} mt-1`}>
+            <span className={`text-sm ${isMyMessage ? 'text-white' : 'text-gray-800'} mt-1`}>
               {message.content}
-            </Text>
+            </span>
           )}
-        </View>
+        </div>
       );
     }
 
     return (
-      <Text className={`text-sm ${isMyMessage ? 'text-white' : 'text-gray-800'}`}>
+      <span className={`text-sm ${isMyMessage ? 'text-white' : 'text-gray-800'}`}>
         {message.content}
-      </Text>
+      </span>
     );
   };
 
   return (
-    <View className={`mb-4 ${isMyMessage ? 'items-end' : 'items-start'}`}>
+    <div className={`mb-4 flex flex-col ${isMyMessage ? 'items-end' : 'items-start'}`}>
       {!isMyMessage && (
-        <Text className="mb-1 ml-1 text-xs text-gray-500">{message.senderNickname}</Text>
+        <span className="mb-1 ml-1 text-xs text-gray-500">{message.senderNickname}</span>
       )}
 
-      <View className="max-w-[80%] flex-row items-end">
+      <div className="max-w-[80%] flex flex-row items-end">
         {isMyMessage ? (
           <>
-            <Text className="mb-1 mr-2 text-xs text-gray-400">{formatDate(message.createdAt)}</Text>
-            <View className="max-w-[250px] rounded-2xl rounded-br-md bg-yellow-400 px-4 py-3">
+            <span className="mb-1 mr-2 text-xs text-gray-400">{formatDate(message.createdAt)}</span>
+            <div className="max-w-[250px] rounded-2xl rounded-br-md bg-yellow-400 px-4 py-3">
               {renderContent()}
-            </View>
+            </div>
           </>
         ) : (
           <>
-            <View className="max-w-[250px] rounded-2xl rounded-bl-md bg-gray-100 px-4 py-3">
+            <div className="max-w-[250px] rounded-2xl rounded-bl-md bg-gray-100 px-4 py-3">
               {renderContent()}
-            </View>
-            <Text className="mb-1 ml-2 text-xs text-gray-400">{formatDate(message.createdAt)}</Text>
+            </div>
+            <span className="mb-1 ml-2 text-xs text-gray-400">{formatDate(message.createdAt)}</span>
           </>
         )}
-      </View>
-    </View>
+      </div>
+    </div>
   );
 };
 

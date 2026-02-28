@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useState } from 'react';
-import { View, Text, Image, ActivityIndicator } from 'react-native';
 import { Card, Button } from '~/shared/ui';
 import type { TradeProduct } from '~/entity/chat/model/chatTypes';
 
@@ -72,95 +71,95 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
     }
   }, [onCancelReservation, localLoading, isLoading]);
 
-  const productImage = product.images[0];
+  const productImage = product.images[0] ?? null;
 
   const alignmentClass = alignment === 'right' ? 'self-end' : 'self-start';
 
   return (
-    <View className={`mb-4 ${alignmentClass}`}>
+    <div className={`mb-4 flex flex-col ${alignmentClass}`}>
       <Card variant="default" padding="none" className="overflow-hidden">
-        <View className="p-4">
-          <View className="mb-3 h-20 w-20 overflow-hidden rounded-lg">
-            <Image
-              source={{ uri: productImage.imageUrl }}
-              className="h-full w-full"
-              resizeMode="cover"
+        {productImage && (
+        <div className="p-4">
+          <div className="mb-3 h-20 w-20 overflow-hidden rounded-lg relative">
+            <img
+              src={productImage.imageUrl}
+              alt="product"
+              className="h-full w-full object-cover"
             />
             {product.images.length > 1 && (
-              <View className="absolute -bottom-1 -right-1 h-5 w-5 items-center justify-center rounded-full bg-black bg-opacity-60">
-                <Text className="text-xs font-bold text-white">+{product.images.length - 1}</Text>
-              </View>
+              <div className="absolute -bottom-1 -right-1 h-5 w-5 flex items-center justify-center rounded-full bg-black bg-opacity-60">
+                <span className="text-xs font-bold text-white">+{product.images.length - 1}</span>
+              </div>
             )}
-          </View>
-        </View>
+          </div>
+        </div>
+        )}
 
-        <View className="p-4">
-          <Text className="mb-2 text-lg font-bold text-gray-900" numberOfLines={1}>
+        <div className="p-4">
+          <p className="mb-2 text-lg font-bold text-gray-900 truncate">
             {product.title}
-          </Text>
-          <Text className="mb-4 text-sm text-gray-600">
+          </p>
+          <p className="mb-4 text-sm text-gray-600">
             {product.isCompleted
               ? '거래가 완료되었습니다'
               : `${requestorNickname}님께서 거래하기를 누르셨습니다`}
-          </Text>
+          </p>
           {showReviewButton && product.isCompleted && (
             <Button
               variant="primary"
               onClick={onReviewButtonPress}
               width="w-full"
               style={{ minHeight: 40 }}>
-              <Text className="text-sm font-medium text-white">리뷰 작성하기</Text>
+              리뷰 작성하기
             </Button>
           )}
           {showButtons && !product.isCompleted && (
-            <>
-              <View className="flex-row justify-between">
-                {isReserved ? (
-                  <Button
-                    variant="secondary"
-                    onClick={handleCancelReservation}
-                    disabled={localLoading || isLoading}
-                    width="w-[48%]"
-                    style={{ minHeight: 40 }}>
-                    {localLoading || isLoading ? (
-                      <ActivityIndicator size="small" color="#8FC31D" />
-                    ) : (
-                      <Text className="text-sm font-medium text-[#8FC31D]">예약 취소</Text>
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    onClick={handleReservation}
-                    disabled={localLoading || isLoading}
-                    width="w-[48%]"
-                    style={{ minHeight: 40 }}>
-                    {localLoading || isLoading ? (
-                      <ActivityIndicator size="small" color="#8FC31D" />
-                    ) : (
-                      <Text className="text-sm font-medium text-[#8FC31D]">예약하기</Text>
-                    )}
-                  </Button>
-                )}
-
+            <div className="flex flex-row justify-between gap-2">
+              {isReserved ? (
                 <Button
-                  variant="primary"
-                  onClick={handleTradeAccept}
+                  variant="secondary"
+                  onClick={handleCancelReservation}
                   disabled={localLoading || isLoading}
                   width="w-[48%]"
                   style={{ minHeight: 40 }}>
                   {localLoading || isLoading ? (
-                    <ActivityIndicator size="small" color="white" />
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#8FC31D] border-t-transparent" />
                   ) : (
-                    <Text className="text-sm font-medium text-white">거래 완료하기</Text>
+                    '예약 취소'
                   )}
                 </Button>
-              </View>
-            </>
+              ) : (
+                <Button
+                  variant="secondary"
+                  onClick={handleReservation}
+                  disabled={localLoading || isLoading}
+                  width="w-[48%]"
+                  style={{ minHeight: 40 }}>
+                  {localLoading || isLoading ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#8FC31D] border-t-transparent" />
+                  ) : (
+                    '예약하기'
+                  )}
+                </Button>
+              )}
+
+              <Button
+                variant="primary"
+                onClick={handleTradeAccept}
+                disabled={localLoading || isLoading}
+                width="w-[48%]"
+                style={{ minHeight: 40 }}>
+                {localLoading || isLoading ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  '거래 완료하기'
+                )}
+              </Button>
+            </div>
           )}
-        </View>
+        </div>
       </Card>
-    </View>
+    </div>
   );
 };
 

@@ -1,5 +1,3 @@
-import { View, Text, Image, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import type { ChatMessageResponse } from '../model/chatTypes';
 import type { UseImageLoaderReturn } from '../model/useImageLoader';
 
@@ -32,37 +30,40 @@ export const renderMessageImages = (
   }
 
   return (
-    <View className="max-w-[250px]">
+    <div className="max-w-[250px] flex flex-col">
       {message.images.map((image) => (
-        <View key={image.imageId} className="relative mb-1">
+        <div key={image.imageId} className="relative mb-1">
           {imageLoader.hasImageError(image.imageId) ? (
-            <View
-              className={`h-48 w-48 items-center justify-center rounded-lg ${config.errorBgColor}`}>
-              <Icon name="image-outline" size={32} color={config.errorIconColor} />
-              <Text className={`mt-1 text-xs ${config.errorTextColor}`}>이미지 로드 실패</Text>
-            </View>
+            <div
+              className={`h-48 w-48 flex flex-col items-center justify-center rounded-lg ${config.errorBgColor}`}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke={config.errorIconColor} strokeWidth="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" fill={config.errorIconColor} />
+                <path d="M21 15L16 10L5 21" stroke={config.errorIconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className={`mt-1 text-xs ${config.errorTextColor}`}>이미지 로드 실패</span>
+            </div>
           ) : (
-            <Image
-              source={{ uri: image.imageUrl }}
-              className="h-48 w-48 rounded-lg"
-              resizeMode="cover"
-              onLoadStart={() => imageLoader.handleImageLoadStart(image.imageId)}
-              onLoadEnd={() => imageLoader.handleImageLoadEnd(image.imageId)}
+            <img
+              src={image.imageUrl}
+              alt="chat image"
+              className="h-48 w-48 rounded-lg object-cover"
+              onLoad={() => imageLoader.handleImageLoadEnd(image.imageId)}
               onError={() => imageLoader.handleImageError(image.imageId)}
             />
           )}
           {imageLoader.isImageLoading(image.imageId) && (
-            <View
-              className={`absolute inset-0 items-center justify-center rounded-lg ${config.loadingBgColor} bg-opacity-50`}>
-              <ActivityIndicator size="small" color="white" />
-            </View>
+            <div
+              className={`absolute inset-0 flex items-center justify-center rounded-lg ${config.loadingBgColor} bg-opacity-50`}>
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            </div>
           )}
-        </View>
+        </div>
       ))}
       {message.content && (
-        <Text className={`mt-1 text-sm ${config.textColor}`}>{message.content}</Text>
+        <span className={`mt-1 text-sm ${config.textColor}`}>{message.content}</span>
       )}
-    </View>
+    </div>
   );
 };
 
@@ -71,7 +72,7 @@ export const renderMessageText = (message: ChatMessageResponse, config: MessageR
     return null;
   }
 
-  return <Text className={`text-base ${config.textColor}`}>{message.content}</Text>;
+  return <span className={`text-base ${config.textColor}`}>{message.content}</span>;
 };
 
 export const renderMessageContent = (

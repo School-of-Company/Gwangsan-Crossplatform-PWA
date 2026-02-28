@@ -1,5 +1,4 @@
-import { View, Text } from 'react-native';
-import { memo } from 'react';
+import { memo, type FC } from 'react';
 import {
   useImageLoader,
   formatMessageTime,
@@ -12,7 +11,7 @@ interface MyMessageProps {
   message: ChatMessageResponse;
 }
 
-const MyMessageComponent: React.FC<MyMessageProps> = ({ message }) => {
+const MyMessageComponent: FC<MyMessageProps> = ({ message }) => {
   const imageLoader = useImageLoader();
 
   const messageConfig: MessageRenderConfig = {
@@ -30,12 +29,12 @@ const MyMessageComponent: React.FC<MyMessageProps> = ({ message }) => {
   if (!content) return null;
 
   return (
-    <View className="mb-4 items-end">
-      <View className="flex-row items-end">
-        <Text className="mr-2 text-xs text-gray-500">{formatMessageTime(message.createdAt)}</Text>
-        <View className="max-w-[280px] rounded-xl bg-orange-400 px-4 py-3">{content}</View>
-      </View>
-    </View>
+    <div className="mb-4 flex flex-col items-end">
+      <div className="flex flex-row items-end">
+        <span className="mr-2 text-xs text-gray-500">{formatMessageTime(message.createdAt)}</span>
+        <div className="max-w-[280px] rounded-xl bg-orange-400 px-4 py-3">{content}</div>
+      </div>
+    </div>
   );
 };
 
