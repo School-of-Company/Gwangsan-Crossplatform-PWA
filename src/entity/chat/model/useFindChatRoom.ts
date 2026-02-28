@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { findChatRoom } from '../api/findChatRoom';
 import { chatRoomKeys } from './useChatRooms';
 import type { FindChatRoomResponse, ChatApiError } from './chatTypes';
@@ -25,17 +25,9 @@ export const useFindChatRoom = ({ onSuccess, onError }: UseFindChatRoomParams = 
     },
     onError: (error: ChatApiError) => {
       if (error.status === 404) {
-        Toast.show({
-          type: 'info',
-          text1: '채팅방 없음',
-          visibilityTime: 2000,
-        });
+        toast.info('채팅방 없음');
       } else {
-        Toast.show({
-          type: 'error',
-          text2: error.message,
-          visibilityTime: 3000,
-        });
+        toast.error(error.message);
       }
 
       onError?.(error);

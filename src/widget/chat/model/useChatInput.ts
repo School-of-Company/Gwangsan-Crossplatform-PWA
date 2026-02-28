@@ -1,6 +1,5 @@
-import { useState, useCallback } from 'react';
-import { Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { useState, useCallback, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { useUploadImage } from '@/shared/model/useUploadImage';
 
 export interface ImagePreview {
@@ -19,6 +18,7 @@ export const useChatInput = ({ onSendMessage, disabled = false }: UseChatInputPr
   const [selectedImages, setSelectedImages] = useState<ImagePreview[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const uploadImageMutation = useUploadImage();
 
@@ -32,74 +32,51 @@ export const useChatInput = ({ onSendMessage, disabled = false }: UseChatInputPr
     setTextMessage(text);
   }, []);
 
-  const requestPermission = useCallback(async (): Promise<boolean> => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Alert.alert('권한 필요', '사진첨부를 위해 사진첩 접근 권한이 필요합니다.');
-      return false;
-    }
-    return true;
-  }, []);
-
-  const selectImage = useCallback(async (): Promise<ImagePicker.ImagePickerAsset | null> => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsMultipleSelection: false,
-        quality: 0.8,
-        allowsEditing: true,
-        aspect: [1, 1],
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        return result.assets[0];
-      }
-      return null;
-    } catch (error) {
-      console.error(error);
-      Alert.alert('오류', '이미지 선택 중 오류가 발생했습니다.');
-      return null;
-    }
-  }, []);
-
   const uploadImage = useCallback(
     async (imageUri: string) => {
       try {
         return await uploadImageMutation.mutateAsync(imageUri);
       } catch (error) {
         console.error(error);
-        Alert.alert('오류', '이미지 업로드 중 오류가 발생했습니다.');
+        toast.error('이미지 업로드 중 오류가 발생했습니다.');
         throw error;
       }
     },
     [uploadImageMutation]
   );
 
-  const handleImagePicker = useCallback(async () => {
+  const handleFileChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      setIsUploading(true);
+
+      try {
+        const localUri = URL.createObjectURL(file);
+        const uploadedImage = await uploadImage(localUri);
+
+        const newImagePreview: ImagePreview = {
+          imageId: uploadedImage.imageId,
+          imageUrl: uploadedImage.imageUrl,
+          localUri,
+        };
+
+        setSelectedImages((prev) => [...prev, newImagePreview]);
+      } finally {
+        setIsUploading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    },
+    [uploadImage]
+  );
+
+  const handleImagePicker = useCallback(() => {
     if (disabled || isUploading || selectedImages.length >= 5) return;
-
-    setIsUploading(true);
-
-    try {
-      const hasPermission = await requestPermission();
-      if (!hasPermission) return;
-
-      const selectedImage = await selectImage();
-      if (!selectedImage) return;
-
-      const uploadedImage = await uploadImage(selectedImage.uri);
-
-      const newImagePreview: ImagePreview = {
-        imageId: uploadedImage.imageId,
-        imageUrl: uploadedImage.imageUrl,
-        localUri: selectedImage.uri,
-      };
-
-      setSelectedImages((prev) => [...prev, newImagePreview]);
-    } finally {
-      setIsUploading(false);
-    }
-  }, [disabled, isUploading, selectedImages.length, requestPermission, selectImage, uploadImage]);
+    fileInputRef.current?.click();
+  }, [disabled, isUploading, selectedImages.length]);
 
   const removeImage = useCallback((imageId: number) => {
     setSelectedImages((prev) => prev.filter((img) => img.imageId !== imageId));
@@ -136,9 +113,11 @@ export const useChatInput = ({ onSendMessage, disabled = false }: UseChatInputPr
     isUploading,
     isSending,
     canSend,
+    fileInputRef,
 
     updateMessage,
     handleImagePicker,
+    handleFileChange,
     removeImage,
     handleSendMessage,
     resetInput,

@@ -1,4 +1,4 @@
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { instance } from '@/shared/lib/axios';
 import type { CreateChatRoomResponse, ChatApiError } from '../model/chatTypes';
 import type { ProductId } from '@/shared/types/chatType';
@@ -11,12 +11,7 @@ export const createChatRoom = async (productId: ProductId): Promise<CreateChatRo
   } catch (e) {
     const error = e as ChatApiError;
 
-    Toast.show({
-      type: 'error',
-      text1: '채팅방 생성 실패',
-      text2: error.message,
-      visibilityTime: 3000,
-    });
+    toast.error(error.message || '채팅방 생성 실패');
 
     throw new Error(getErrorMessage(error));
   }

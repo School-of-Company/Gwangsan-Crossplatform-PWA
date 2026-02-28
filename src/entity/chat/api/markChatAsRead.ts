@@ -1,4 +1,4 @@
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { instance } from '@/shared/lib/axios';
 import type { RoomId, MessageId } from '@/shared/types/chatType';
 import type { ChatApiError } from '../model/chatTypes';
@@ -20,12 +20,7 @@ export const markChatAsRead = async (roomId: RoomId, lastMessageId: MessageId): 
   } catch (e) {
     const error = e as ChatApiError;
 
-    Toast.show({
-      type: 'error',
-      text1: '읽음 처리 실패',
-      text2: error.message,
-      visibilityTime: 3000,
-    });
+    toast.error(error.message || '읽음 처리 실패');
 
     throw new Error(getErrorMessage(error));
   }

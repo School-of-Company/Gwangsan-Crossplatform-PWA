@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import Toast from 'react-native-toast-message';
+import { toast } from 'react-toastify';
 import { createChatRoom } from '../api/createChatRoom';
 import { chatRoomKeys } from './useChatRooms';
 import type { CreateChatRoomResponse, ChatApiError } from './chatTypes';
@@ -21,22 +21,12 @@ export const useCreateChatRoom = ({ onSuccess, onError }: UseCreateChatRoomParam
         queryKey: chatRoomKeys.list(),
       });
 
-      Toast.show({
-        type: 'success',
-        text1: '채팅방 생성 완료',
-        text2: '채팅을 시작할 수 있습니다.',
-        visibilityTime: 2000,
-      });
+      toast.success('채팅방이 생성되었습니다. 채팅을 시작할 수 있습니다.');
 
       onSuccess?.(data);
     },
     onError: (error: ChatApiError) => {
-      Toast.show({
-        type: 'error',
-        text1: '채팅방 생성 실패',
-        text2: error.message,
-        visibilityTime: 3000,
-      });
+      toast.error(error.message || '채팅방 생성 실패');
 
       onError?.(error);
     },
