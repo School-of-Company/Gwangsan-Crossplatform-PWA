@@ -30,16 +30,30 @@ export const renderMessageImages = (
   }
 
   return (
-    <div className="max-w-[250px] flex flex-col">
+    <div className="flex max-w-[250px] flex-col">
       {message.images.map((image) => (
         <div key={image.imageId} className="relative mb-1">
           {imageLoader.hasImageError(image.imageId) ? (
             <div
-              className={`h-48 w-48 flex flex-col items-center justify-center rounded-lg ${config.errorBgColor}`}>
+              className={`flex h-48 w-48 flex-col items-center justify-center rounded-lg ${config.errorBgColor}`}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke={config.errorIconColor} strokeWidth="2" />
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="2"
+                  stroke={config.errorIconColor}
+                  strokeWidth="2"
+                />
                 <circle cx="8.5" cy="8.5" r="1.5" fill={config.errorIconColor} />
-                <path d="M21 15L16 10L5 21" stroke={config.errorIconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M21 15L16 10L5 21"
+                  stroke={config.errorIconColor}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               <span className={`mt-1 text-xs ${config.errorTextColor}`}>이미지 로드 실패</span>
             </div>

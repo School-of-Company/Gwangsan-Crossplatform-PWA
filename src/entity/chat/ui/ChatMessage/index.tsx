@@ -43,7 +43,7 @@ const ChatMessageComponent = ({ message }: ChatMessageProps) => {
         <span className="mb-1 ml-1 text-xs text-gray-500">{message.senderNickname}</span>
       )}
 
-      <div className="max-w-[80%] flex flex-row items-end">
+      <div className="flex max-w-[80%] flex-row items-end">
         {isMyMessage ? (
           <>
             <span className="mb-1 mr-2 text-xs text-gray-400">{formatDate(message.createdAt)}</span>

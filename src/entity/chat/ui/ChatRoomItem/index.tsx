@@ -17,7 +17,7 @@ const ChatRoomItemComponent = ({ room, onPress }: ChatRoomItemProps) => {
   const renderUnreadBadge = () => {
     if (!room.unreadMessageCount || room.unreadMessageCount === 0) return null;
     return (
-      <div className="ml-2 min-w-[20px] flex items-center justify-center rounded-full bg-yellow-400 px-1.5 py-0.5">
+      <div className="ml-2 flex min-w-[20px] items-center justify-center rounded-full bg-yellow-400 px-1.5 py-0.5">
         <span className="text-xs font-semibold text-white">{room.unreadMessageCount}</span>
       </div>
     );
@@ -28,20 +28,16 @@ const ChatRoomItemComponent = ({ room, onPress }: ChatRoomItemProps) => {
   return (
     <button
       onClick={handlePress}
-      className="flex w-full flex-row items-center border-b border-gray-100 px-4 py-3 active:bg-gray-50 text-left">
+      className="flex w-full flex-row items-center border-b border-gray-100 px-4 py-3 text-left active:bg-gray-50">
       <img
         src={productImage || defaultProfile}
         alt="product"
         className="mr-3 h-14 w-14 rounded-lg object-cover"
       />
-      <div className="flex-1 min-w-0">
-        <p className="text-base font-bold text-gray-900 truncate">
-          {room.product?.title}
-        </p>
-        <p className="text-sm text-gray-700 truncate">
-          {room.member.nickname}
-        </p>
-        <p className="text-xs text-gray-500 truncate">
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-base font-bold text-gray-900">{room.product?.title}</p>
+        <p className="truncate text-sm text-gray-700">{room.member.nickname}</p>
+        <p className="truncate text-xs text-gray-500">
           {room.lastMessageType === 'IMAGE' ? '📷 사진을 보냈습니다.' : room.lastMessage}
         </p>
       </div>

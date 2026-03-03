@@ -63,7 +63,13 @@ const ChatInputComponent = ({ onSendMessage, disabled }: ChatInputProps) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <circle cx="12" cy="13" r="4" stroke={canSelectImage ? '#8F9094' : '#D1D5DB'} strokeWidth="2" />
+                <circle
+                  cx="12"
+                  cy="13"
+                  r="4"
+                  stroke={canSelectImage ? '#8F9094' : '#D1D5DB'}
+                  strokeWidth="2"
+                />
               </svg>
             )}
           </button>
@@ -71,14 +77,20 @@ const ChatInputComponent = ({ onSendMessage, disabled }: ChatInputProps) => {
         <button
           onClick={chatInput.handleSendMessage}
           disabled={!chatInput.canSend}
-          className={`h-12 w-12 flex items-center justify-center rounded-full ${
+          className={`flex h-12 w-12 items-center justify-center rounded-full ${
             chatInput.canSend ? 'bg-orange-400' : 'bg-gray-300'
           }`}>
           {chatInput.isSending ? (
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           )}
         </button>

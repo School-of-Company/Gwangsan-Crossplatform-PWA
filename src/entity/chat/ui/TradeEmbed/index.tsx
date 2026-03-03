@@ -79,26 +79,24 @@ const TradeEmbedComponent: React.FC<TradeEmbedProps> = ({
     <div className={`mb-4 flex flex-col ${alignmentClass}`}>
       <Card variant="default" padding="none" className="overflow-hidden">
         {productImage && (
-        <div className="p-4">
-          <div className="mb-3 h-20 w-20 overflow-hidden rounded-lg relative">
-            <img
-              src={productImage.imageUrl}
-              alt="product"
-              className="h-full w-full object-cover"
-            />
-            {product.images.length > 1 && (
-              <div className="absolute -bottom-1 -right-1 h-5 w-5 flex items-center justify-center rounded-full bg-black bg-opacity-60">
-                <span className="text-xs font-bold text-white">+{product.images.length - 1}</span>
-              </div>
-            )}
+          <div className="p-4">
+            <div className="relative mb-3 h-20 w-20 overflow-hidden rounded-lg">
+              <img
+                src={productImage.imageUrl}
+                alt="product"
+                className="h-full w-full object-cover"
+              />
+              {product.images.length > 1 && (
+                <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black bg-opacity-60">
+                  <span className="text-xs font-bold text-white">+{product.images.length - 1}</span>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
         )}
 
         <div className="p-4">
-          <p className="mb-2 text-lg font-bold text-gray-900 truncate">
-            {product.title}
-          </p>
+          <p className="mb-2 truncate text-lg font-bold text-gray-900">{product.title}</p>
           <p className="mb-4 text-sm text-gray-600">
             {product.isCompleted
               ? '거래가 완료되었습니다'

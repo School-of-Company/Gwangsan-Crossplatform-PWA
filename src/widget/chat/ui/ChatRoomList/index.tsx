@@ -50,9 +50,7 @@ export function ChatRoomList() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="flex justify-end px-4 py-2">
-        <button
-          onClick={handleRefresh}
-          className="text-sm text-gray-500 active:text-gray-700">
+        <button onClick={handleRefresh} className="text-sm text-gray-500 active:text-gray-700">
           새로고침
         </button>
       </div>
